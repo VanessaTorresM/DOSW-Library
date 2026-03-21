@@ -17,4 +17,5 @@ public class loan {
 
     public void setLoanDate(Date date) {
     }
+
 }

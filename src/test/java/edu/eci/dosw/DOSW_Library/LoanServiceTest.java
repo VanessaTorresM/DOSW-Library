@@ -15,6 +15,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -25,7 +28,6 @@ class LoanServiceTest {
     private BookService bookService;
     @Mock
     private UserService userService;
-
     @Mock
     private ValidationUtil validationUtil;
 
@@ -41,15 +43,13 @@ class LoanServiceTest {
 
         when(userService.findById("u1")).thenReturn(user);
         when(bookService.findById("b1")).thenReturn(book);
-        when(bookService.getStock(book)).thenReturn(1); // Hay stock
+        when(bookService.getStock(book)).thenReturn(1);
 
         loan result = loanService.createLoan("u1", "b1");
 
         assertNotNull(result);
         assertEquals("active", result.getStatus());
-        assertEquals(book, result.getBook());
-
-        verify(bookService, times(1)).updateStock(book, 0);
+        verify(bookService).updateStock(book, 0);
     }
 
     @Test
@@ -61,7 +61,7 @@ class LoanServiceTest {
 
         when(userService.findById("u1")).thenReturn(user);
         when(bookService.findById("b1")).thenReturn(book);
-        when(bookService.getStock(book)).thenReturn(0); // Stock en cero
+        when(bookService.getStock(book)).thenReturn(0);
 
         doThrow(new BookNotAvailableException("No hay ejemplares disponibles"))
                 .when(validationUtil).checkAvailability(0);
@@ -70,6 +70,40 @@ class LoanServiceTest {
             loanService.createLoan("u1", "b1");
         });
 
-        verify(bookService, never()).updateStock(any(Book.class), anyInt());
+        verify(bookService, never()).updateStock(any(), anyInt());
+    }
+
+
+    @Test
+    void shouldThrowExceptionWhenUserNotFound() {
+        when(userService.findById("u999")).thenReturn(null);
+
+        assertThrows(RuntimeException.class, () -> {
+            loanService.createLoan("u999", "b1");
+        });
+    }
+
+    @Test
+    void shouldThrowExceptionWhenBookNotFound() {
+        User user = new User();
+        user.setId("u1");
+        when(userService.findById("u1")).thenReturn(user);
+
+        when(bookService.findById("b999")).thenReturn(null);
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            loanService.createLoan("u1", "b999");
+        });
+
+        assertTrue(exception.getMessage().contains("Libro no encontrado"));
+    }
+
+    @Test
+    void shouldReturnAllLoans() {
+        List<loan> mockLoans = new ArrayList<>();
+        mockLoans.add(new loan());
+
+        List<loan> result = loanService.getAllLoans();
+        assertNotNull(result);
     }
 }

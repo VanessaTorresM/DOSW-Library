@@ -1,37 +1,53 @@
 package edu.eci.dosw.DOSW_Library.Controller;
 
-
 import edu.eci.dosw.DOSW_Library.Modelo.Book;
 import edu.eci.dosw.DOSW_Library.Service.BookService;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/books")
+@Tag(name = "Libros", description = "Gestión del inventario de libros")
 public class BookController {
 
-    @Autowired
-    private BookService bookService;
+    private final BookService bookService;
+
+    // Inyección por constructor (Sin @Autowired)
+    public BookController(BookService bookService) {
+        this.bookService = bookService;
+    }
 
     @GetMapping
+    @Operation(summary = "Obtener todos los libros")
     public List<Book> getAllBooks() {
         return bookService.findAll();
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Buscar libro por ID")
     public Book getBookById(@PathVariable String id) {
         return bookService.findById(id);
     }
 
     @PostMapping
-    public Book addBook(@RequestBody Book book) {
-        return bookService.save(book);
+    @Operation(summary = "Agregar un nuevo libro al inventario")
+    public Book addBook(@RequestBody Book book, @RequestParam int quantity) {
+        // Ajustado para usar el save(book, quantity) de tu servicio
+        return bookService.save(book, quantity);
     }
 
-    @PutMapping("/{id}/availability")
-    public void updateAvailability(@PathVariable String id, @RequestParam boolean available) {
-        bookService.updateStock(id, available);
+    @PutMapping("/{id}/stock")
+    @Operation(summary = "Actualizar stock de un libro", description = "Cambia la cantidad disponible en el mapa")
+    public void updateStock(@PathVariable String id, @RequestParam int quantity) {
+        Book book = bookService.findById(id);
+        if (book != null) {
+            // Ajustado para enviar el objeto Book y el int que pide el servicio
+            bookService.updateStock(book, quantity);
+        } else {
+            throw new RuntimeException("Libro no encontrado con ID: " + id);
+        }
     }
 }

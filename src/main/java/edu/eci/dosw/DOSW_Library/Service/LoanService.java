@@ -17,7 +17,6 @@ public class LoanService {
     private final UserService userService;
     private final ValidationUtil validationUtil;
 
-    // Inyección por constructor: Sin @Autowired
     public LoanService(BookService bookService, UserService userService, ValidationUtil validationUtil) {
         this.bookService = bookService;
         this.userService = userService;
@@ -32,17 +31,14 @@ public class LoanService {
             throw new RuntimeException("Usuario o Libro no encontrado");
         }
 
-        // 1. Validamos disponibilidad
         validationUtil.checkAvailability(bookService.getStock(book));
 
-        // 2. Actualizamos el stock (Bajamos 1 unidad en el mapa)
         bookService.updateStock(book, bookService.getStock(book) - 1);
 
-        // 3. Creamos el objeto préstamo
         loan newLoan = new loan();
         newLoan.setUser(user);
         newLoan.setBook(book);
-        newLoan.setLoanDate(new Date()); // Asegúrate que en loan.java sea 'loandate'
+        newLoan.setLoanDate(new Date());
         newLoan.setStatus("active");
 
         loans.add(newLoan);

@@ -2,7 +2,6 @@ package edu.eci.dosw.DOSW_Library.Controller;
 
 import edu.eci.dosw.DOSW_Library.Modelo.loan;
 import edu.eci.dosw.DOSW_Library.Service.LoanService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,21 +10,19 @@ import java.util.List;
 @RequestMapping("/api/loans")
 public class LoanController {
 
-    @Autowired
-    private LoanService loanService;
+    private final LoanService loanService;
+
+    public LoanController(LoanService loanService) {
+        this.loanService = loanService;
+    }
 
     @PostMapping
     public loan createLoan(@RequestParam String userId, @RequestParam String bookId) {
-        return loanService.borrowBook(userId, bookId);
+        return loanService.createLoan(userId, bookId);
     }
 
     @GetMapping
     public List<loan> getAllLoans() {
-        return loanService.findAll();
-    }
-
-    @PutMapping("/{loanId}/return")
-    public loan returnBook(@PathVariable String loanId) {
-        return loanService.returnBook(loanId);
+        return loanService.getAllLoans();
     }
 }
