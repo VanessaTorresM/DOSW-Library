@@ -2,11 +2,13 @@ package edu.eci.dosw.DOSW_Library;
 
 import edu.eci.dosw.DOSW_Library.Modelo.Book;
 import edu.eci.dosw.DOSW_Library.Modelo.User;
-import edu.eci.dosw.DOSW_Library.Service.BookService;
-import edu.eci.dosw.DOSW_Library.Service.UserService;
-
 import edu.eci.dosw.DOSW_Library.Modelo.loan;
+import edu.eci.dosw.DOSW_Library.Service.BookService;
 import edu.eci.dosw.DOSW_Library.Service.LoanService;
+import edu.eci.dosw.DOSW_Library.Service.UserService;
+import edu.eci.dosw.DOSW_Library.Util.ValidationUtil;
+import edu.eci.dosw.DOSW_Library.Exeption.BookNotAvailableException;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,6 +26,9 @@ class LoanServiceTest {
     @Mock
     private UserService userService;
 
+    @Mock
+    private ValidationUtil validationUtil;
+
     @InjectMocks
     private LoanService loanService;
 
@@ -38,11 +43,13 @@ class LoanServiceTest {
         when(bookService.findById("b1")).thenReturn(book);
         when(bookService.getStock(book)).thenReturn(1); // Hay stock
 
-        loan result = loanService.borrowBook("u1", "b1");
+        loan result = loanService.createLoan("u1", "b1");
 
         assertNotNull(result);
         assertEquals("active", result.getStatus());
-        verify(bookService, times(1)).updateStock("b1", false);
+        assertEquals(book, result.getBook());
+
+        verify(bookService, times(1)).updateStock(book, 0);
     }
 
     @Test
@@ -54,11 +61,15 @@ class LoanServiceTest {
 
         when(userService.findById("u1")).thenReturn(user);
         when(bookService.findById("b1")).thenReturn(book);
-        when(bookService.getStock(book)).thenReturn(0); // NO hay stock
+        when(bookService.getStock(book)).thenReturn(0); // Stock en cero
 
-        loan result = loanService.borrowBook("u1", "b1");
+        doThrow(new BookNotAvailableException("No hay ejemplares disponibles"))
+                .when(validationUtil).checkAvailability(0);
 
-        assertNull(result);
-        verify(bookService, never()).updateStock(anyString(), anyBoolean());
+        assertThrows(BookNotAvailableException.class, () -> {
+            loanService.createLoan("u1", "b1");
+        });
+
+        verify(bookService, never()).updateStock(any(Book.class), anyInt());
     }
 }

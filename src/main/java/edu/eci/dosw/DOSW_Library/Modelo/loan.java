@@ -14,4 +14,7 @@ public class loan {
     private User user;
     private Date loandate;
     private String status;
+
+    public void setLoanDate(Date date) {
+    }
 }

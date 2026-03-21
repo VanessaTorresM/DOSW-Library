@@ -6,7 +6,6 @@ import java.util.*;
 
 @Service
 public class BookService {
-    // Mapa: Clave = Libro, Valor = Cantidad disponible
     private final Map<Book, Integer> bookStock = new HashMap<>();
 
     public List<Book> findAll() {
@@ -20,18 +19,13 @@ public class BookService {
                 .orElse(null);
     }
 
-    public Book save(Book book) {
-        // Al agregar un libro nuevo, iniciamos con 1 ejemplar o sumamos si ya existe
-        bookStock.put(book, bookStock.getOrDefault(book, 0) + 1);
+    public Book save(Book book, int quantity) {
+        bookStock.put(book, bookStock.getOrDefault(book, 0) + quantity);
         return book;
     }
 
-    public void updateStock(String id, boolean available) {
-        Book book = findById(id);
-        if (book != null) {
-            // Lógica simple: si no está disponible ponemos stock en 0, si lo está, en 1
-            bookStock.put(book, available ? 1 : 0);
-        }
+    public void updateStock(Book book, int available) {
+        bookStock.put(book, available);
     }
 
     public int getStock(Book book) {

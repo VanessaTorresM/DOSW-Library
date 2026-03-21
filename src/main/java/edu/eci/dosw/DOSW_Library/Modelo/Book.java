@@ -1,13 +1,12 @@
 package edu.eci.dosw.DOSW_Library.Modelo;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 
 @Data
 @Getter
 @Setter
-
+@AllArgsConstructor
+@NoArgsConstructor
 public class Book {
     private String Id;
     private String author;
