@@ -15,7 +15,7 @@ public class BookController {
 
     private final BookService bookService;
 
-    // Inyección por constructor (Sin @Autowired)
+
     public BookController(BookService bookService) {
         this.bookService = bookService;
     }
@@ -35,7 +35,6 @@ public class BookController {
     @PostMapping
     @Operation(summary = "Agregar un nuevo libro al inventario")
     public Book addBook(@RequestBody Book book, @RequestParam int quantity) {
-        // Ajustado para usar el save(book, quantity) de tu servicio
         return bookService.save(book, quantity);
     }
 
@@ -44,7 +43,6 @@ public class BookController {
     public void updateStock(@PathVariable String id, @RequestParam int quantity) {
         Book book = bookService.findById(id);
         if (book != null) {
-            // Ajustado para enviar el objeto Book y el int que pide el servicio
             bookService.updateStock(book, quantity);
         } else {
             throw new RuntimeException("Libro no encontrado con ID: " + id);
