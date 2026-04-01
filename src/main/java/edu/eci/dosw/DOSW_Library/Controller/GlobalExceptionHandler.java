@@ -1,7 +1,7 @@
 package edu.eci.dosw.DOSW_Library.Controller;
 
 
-import edu.eci.dosw.DOSW_Library.Exeption.BookNotAvailableException;
+import edu.eci.dosw.DOSW_Library.Exception.BookNotAvailableException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -12,7 +12,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BookNotAvailableException.class)
     public ResponseEntity<String> handleBookNotAvailable(BookNotAvailableException ex) {
-        // Retorna un 400 Bad Request con el mensaje de error
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 

@@ -1,4 +1,4 @@
-package edu.eci.dosw.DOSW_Library.Exeption;
+package edu.eci.dosw.DOSW_Library.Exception;
 
 
 public class BookNotAvailableException extends RuntimeException {

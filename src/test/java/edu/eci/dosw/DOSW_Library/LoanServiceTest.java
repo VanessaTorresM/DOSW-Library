@@ -7,7 +7,7 @@ import edu.eci.dosw.DOSW_Library.Service.BookService;
 import edu.eci.dosw.DOSW_Library.Service.LoanService;
 import edu.eci.dosw.DOSW_Library.Service.UserService;
 import edu.eci.dosw.DOSW_Library.Util.ValidationUtil;
-import edu.eci.dosw.DOSW_Library.Exeption.BookNotAvailableException;
+import edu.eci.dosw.DOSW_Library.Exception.BookNotAvailableException;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

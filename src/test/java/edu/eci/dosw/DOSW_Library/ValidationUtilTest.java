@@ -1,6 +1,6 @@
 package edu.eci.dosw.DOSW_Library;
 
-import edu.eci.dosw.DOSW_Library.Exeption.BookNotAvailableException;
+import edu.eci.dosw.DOSW_Library.Exception.BookNotAvailableException;
 import edu.eci.dosw.DOSW_Library.Util.ValidationUtil;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;

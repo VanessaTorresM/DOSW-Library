@@ -38,7 +38,7 @@ public class LoanService {
         loan newLoan = new loan();
         newLoan.setUser(user);
         newLoan.setBook(book);
-        newLoan.setLoanDate(new Date());
+        newLoan.setLoandate(new Date());
         newLoan.setStatus("active");
 
         loans.add(newLoan);

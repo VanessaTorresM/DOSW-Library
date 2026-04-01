@@ -6,13 +6,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.eci.dosw.DOSW_Library.Controller.BookController;
 import edu.eci.dosw.DOSW_Library.Modelo.Book;
 import edu.eci.dosw.DOSW_Library.Service.BookService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.TestConstructor;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Collections;
 
@@ -23,18 +21,21 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import org.springframework.test.context.bean.override.mockito.MockitoBean; // Nuevo Import
+
 @WebMvcTest(BookController.class)
+@TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 class BookControllerTest {
 
-    private MockMvc mockMvc;
+    private final MockMvc mockMvc;
+    private final ObjectMapper objectMapper;
 
+    @MockitoBean
     private BookService bookService;
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
-
-    @BeforeEach
-    void setUp(WebApplicationContext webApplicationContext) {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+    public BookControllerTest(MockMvc mockMvc) {
+        this.mockMvc = mockMvc;
+        this.objectMapper = new ObjectMapper();
     }
 
     @Test

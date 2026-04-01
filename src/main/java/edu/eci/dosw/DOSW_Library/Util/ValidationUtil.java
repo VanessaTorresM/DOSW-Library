@@ -1,6 +1,6 @@
 package edu.eci.dosw.DOSW_Library.Util;
 
-import edu.eci.dosw.DOSW_Library.Exeption.BookNotAvailableException;
+import edu.eci.dosw.DOSW_Library.Exception.BookNotAvailableException;
 import org.springframework.stereotype.Component;
 
 @Component
