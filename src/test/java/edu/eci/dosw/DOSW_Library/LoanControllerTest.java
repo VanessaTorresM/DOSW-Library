@@ -3,6 +3,7 @@ package edu.eci.dosw.DOSW_Library;
 import edu.eci.dosw.DOSW_Library.Controller.LoanController;
 import edu.eci.dosw.DOSW_Library.Modelo.loan;
 import edu.eci.dosw.DOSW_Library.Service.LoanService;
+import edu.eci.dosw.DOSW_Library.Validator.LoanValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -23,6 +24,9 @@ class LoanControllerTest {
 
     @MockitoBean
     private LoanService loanService;
+
+    @MockitoBean
+    private LoanValidator loanValidator;
 
     @BeforeEach
     void setUp(WebApplicationContext webApplicationContext) {

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class LoanValidator {
 
-    public void validateLoan(loan loan) {
+    public  void validateLoan(loan loan) {
         if (loan.getBook() == null) {
             throw new LibraryException("El libro no puede ser nulo para un préstamo.");
         }

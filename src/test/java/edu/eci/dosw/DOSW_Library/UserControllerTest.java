@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.eci.dosw.DOSW_Library.Controller.UserController;
 import edu.eci.dosw.DOSW_Library.Modelo.User;
 import edu.eci.dosw.DOSW_Library.Service.UserService;
+import edu.eci.dosw.DOSW_Library.Validator.UserValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -30,6 +31,9 @@ class UserControllerTest {
     private UserService userService;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
+
+    @MockitoBean
+    private UserValidator userValidator;
 
     @BeforeEach
     void setUp(WebApplicationContext webApplicationContext) {
