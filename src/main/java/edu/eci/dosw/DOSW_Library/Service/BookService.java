@@ -1,34 +1,54 @@
 package edu.eci.dosw.DOSW_Library.Service;
 
 import edu.eci.dosw.DOSW_Library.Modelo.Book;
+import edu.eci.dosw.DOSW_Library.Persistence.Entidades.BookEntity;
+import edu.eci.dosw.DOSW_Library.Persistence.Mapper.BookMapper;
+import edu.eci.dosw.DOSW_Library.Persistence.Repositorios.BookRepository;
 import org.springframework.stereotype.Service;
 import java.util.*;
+import java.util.stream.Collectors;
+
 
 @Service
 public class BookService {
-    private final Map<Book, Integer> bookStock = new HashMap<>();
+    private final BookRepository bookRepository;
+    private final BookMapper bookMapper;
+
+    public BookService(BookRepository bookRepository, BookMapper bookMapper) {
+        this.bookRepository = bookRepository;
+        this.bookMapper = bookMapper;
+    }
 
     public List<Book> findAll() {
-        return new ArrayList<>(bookStock.keySet());
+        return bookRepository.findAll().stream()
+                .map(bookMapper::toModel)
+                .collect(Collectors.toList());
     }
 
     public Book findById(String id) {
-        return bookStock.keySet().stream()
-                .filter(b -> b.getId().equals(id))
-                .findFirst()
+        return bookRepository.findById(id)
+                .map(bookMapper::toModel)
                 .orElse(null);
     }
 
-    public Book save(Book book, int quantity) {
-        bookStock.put(book, bookStock.getOrDefault(book, 0) + quantity);
-        return book;
+    public List<Book> findAvailable(int amount) {
+        return bookRepository.findByAvailableStockGreaterThan(amount).stream()
+                .map(bookMapper::toModel)
+                .collect(Collectors.toList());
     }
 
-    public void updateStock(Book book, int available) {
-        bookStock.put(book, available);
+    public Book save(Book book) {
+        BookEntity entity = bookMapper.toEntity(book);
+        BookEntity savedEntity = bookRepository.save(entity);
+        return bookMapper.toModel(savedEntity);
     }
 
-    public int getStock(Book book) {
-        return bookStock.getOrDefault(book, 0);
+    // Método para el LoanService: usa la entidad directamente
+    public void saveEntity(BookEntity bookEntity) {
+        bookRepository.save(bookEntity);
+    }
+
+    public BookEntity findEntityById(String id) {
+        return bookRepository.findById(id).orElse(null);
     }
 }
