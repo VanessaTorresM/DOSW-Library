@@ -24,6 +24,8 @@ Este diagrama de clases expone el modelo de dominio del sistema, donde la entida
 ## Covertura de las pruebas con Jacoco 
 <img width="1733" height="493" alt="image" src="https://github.com/user-attachments/assets/24b894e2-2cf3-4c21-924e-ef5b7271ec2b" />
 
+## Análisis estatico
+<img width="1120" height="273" alt="image" src="https://github.com/user-attachments/assets/d1f53205-3c27-4851-8b83-360d2b335898" />
 
 ## Video del demo en Swagger 
 https://youtu.be/uvXhNBVr9IE?si=wKeUfBRbuZLsMHq9
