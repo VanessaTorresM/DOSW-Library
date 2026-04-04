@@ -30,3 +30,9 @@ Este diagrama de clases expone el modelo de dominio del sistema, donde la entida
 ## Video del demo en Swagger 
 https://youtu.be/uvXhNBVr9IE?si=wKeUfBRbuZLsMHq9
 
+## Diagrama Entidad-Relación
+<img width="511" height="471" alt="Biblioteca-Página-4 drawio" src="https://github.com/user-attachments/assets/aef0c06c-722f-4b98-b35c-59581b7976fc" />
+
+
+El diagrama de entidad relación presenta la estructura de la base de datos en tercera forma normal, enfocándose en la gestión de inventario y seguridad mediante tres tablas principales. La tabla Loan funciona como el punto de unión central, utilizando llaves foráneas para conectar a un único User y a un único Book con cada registro de préstamo, lo que establece relaciones de uno a muchos donde un usuario puede realizar múltiples solicitudes y un libro puede aparecer en diversos préstamos a lo largo del tiempo.
+
