@@ -1,91 +1,107 @@
 package edu.eci.dosw.DOSW_Library;
 
 import edu.eci.dosw.DOSW_Library.Modelo.Book;
+import edu.eci.dosw.DOSW_Library.Persistence.Entidades.BookEntity;
+import edu.eci.dosw.DOSW_Library.Persistence.Mapper.BookMapper;
+import edu.eci.dosw.DOSW_Library.Persistence.Repositorios.BookRepository;
 import edu.eci.dosw.DOSW_Library.Service.BookService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class BookServiceTest {
 
+    @Mock
+    private BookRepository bookRepository;
+
+    @Mock
+    private BookMapper bookMapper;
+
+    @InjectMocks
     private BookService bookService;
+
+    private Book bookModel;
+    private BookEntity bookEntity;
 
     @BeforeEach
     void setUp() {
-        bookService = new BookService();
+        bookModel = new Book("b1", "Martin Fowler", "Refactoring");
+
+        bookEntity = new BookEntity();
+        bookEntity.setBookId("b1");
+        bookEntity.setTitle("Refactoring");
+        bookEntity.setAuthor("Martin Fowler");
+        bookEntity.setTotalStock(10);
+        bookEntity.setAvailableStock(10);
     }
 
-    // --- TESTS DE CAMINO FELIZ (Ya los tenías) ---
+    @Test
+    void shouldSaveBookCorrectly() {
+        when(bookMapper.toEntity(any(Book.class))).thenReturn(bookEntity);
+        when(bookRepository.save(any(BookEntity.class))).thenReturn(bookEntity);
+        when(bookMapper.toModel(any(BookEntity.class))).thenReturn(bookModel);
+
+        Book saved = bookService.save(bookModel, 10);
+
+        assertNotNull(saved);
+        verify(bookRepository).save(argThat(entity ->
+                entity.getAvailableStock() == 10 && entity.getBookId().equals("b1")
+        ));
+    }
 
     @Test
-    void shouldSaveAndFindBook() {
-        Book book = new Book();
-        book.setId("1");
-        book.setTitle("Clean Code");
+    void shouldFindByIdUsingEntity() {
+        when(bookRepository.findById("b1")).thenReturn(Optional.of(bookEntity));
+        when(bookMapper.toModel(bookEntity)).thenReturn(bookModel);
 
-        bookService.save(book, 1);
-        Book found = bookService.findById("1");
+        Book found = bookService.findById("b1");
 
         assertNotNull(found);
-        assertEquals("Clean Code", found.getTitle());
+        assertEquals("Refactoring", found.getTitle());
     }
 
     @Test
-    void shouldUpdateStockCorrectly() {
-        Book book = new Book();
-        book.setId("1");
-        bookService.save(book, 5);
+    void shouldReturnNullWhenNotFoundInDB() {
+        when(bookRepository.findById("non-existent")).thenReturn(Optional.empty());
 
-        bookService.updateStock(book, 10);
-        assertEquals(10, bookService.getStock(book));
-    }
+        Book found = bookService.findById("non-existent");
 
-    // --- TESTS PARA SUBIR COBERTURA (Nuevos) ---
-
-    @Test
-    void shouldReturnNullWhenBookNotFoundById() {
-        // Probamos el .orElse(null) del stream
-        Book found = bookService.findById("999"); // ID que no existe
-        assertNull(found, "Debe retornar null si el ID no existe");
+        assertNull(found);
     }
 
     @Test
-    void shouldReturnZeroStockForNonExistentBook() {
-        // Probamos el .getOrDefault(book, 0)
-        Book bookNotSaved = new Book();
-        bookNotSaved.setId("99");
+    void shouldFindAvailableBooksByStock() {
+        when(bookRepository.findByAvailableStockGreaterThan(5))
+                .thenReturn(Collections.singletonList(bookEntity));
+        when(bookMapper.toModel(bookEntity)).thenReturn(bookModel);
 
-        int stock = bookService.getStock(bookNotSaved);
-        assertEquals(0, stock, "El stock de un libro no registrado debe ser 0");
+        List<Book> result = bookService.findAvailable(5);
+
+        assertFalse(result.isEmpty());
+        assertEquals(1, result.size());
+        verify(bookRepository).findByAvailableStockGreaterThan(5);
     }
 
     @Test
-    void shouldFindAllBooks() {
-        // Probamos el método findAll() y la conversión a ArrayList
-        Book b1 = new Book(); b1.setId("b1");
-        Book b2 = new Book(); b2.setId("b2");
+    void shouldFindEntityDirectly() {
+        when(bookRepository.findById("b1")).thenReturn(Optional.of(bookEntity));
 
-        bookService.save(b1, 1);
-        bookService.save(b2, 1);
+        BookEntity entityFound = bookService.findEntityById("b1");
 
-        List<Book> all = bookService.findAll();
-        assertEquals(2, all.size());
-        assertTrue(all.contains(b1));
-        assertTrue(all.contains(b2));
-    }
-
-    @Test
-    void shouldIncrementStockWhenSavingSameBookMultipleTimes() {
-        // Probamos la lógica del getOrDefault dentro del método save
-        Book book = new Book();
-        book.setId("1");
-
-        bookService.save(book, 2);
-        bookService.save(book, 3);
-
-        assertEquals(5, bookService.getStock(book), "El stock debería sumarse (2+3=5)");
+        assertNotNull(entityFound);
+        assertEquals("b1", entityFound.getBookId());
+        assertEquals(10, entityFound.getAvailableStock());
     }
 }

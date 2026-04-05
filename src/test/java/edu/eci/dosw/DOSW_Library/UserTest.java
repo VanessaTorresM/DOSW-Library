@@ -32,9 +32,9 @@ class UserTest {
         user3.setId("u2");
         user3.setName("Santiago");
 
-        assertEquals(user1, user2);           //  Objetos con mismos valores
+        assertEquals(user1, user2);
         assertEquals(user1, user1);
-        assertNotEquals(user1, user3);        //  Valores diferentes
+        assertNotEquals(user1, user3);
         assertNotEquals(user1, null);
         assertNotEquals(user1, "no es user");
         assertEquals(user1.hashCode(), user2.hashCode());

@@ -1,6 +1,7 @@
 package edu.eci.dosw.DOSW_Library.Controller;
 
 import edu.eci.dosw.DOSW_Library.Modelo.Book;
+import edu.eci.dosw.DOSW_Library.Persistence.Mapper.BookMapper;
 import edu.eci.dosw.DOSW_Library.Service.BookService;
 import edu.eci.dosw.DOSW_Library.Validator.BookValidator;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
 @RestController
 @RequestMapping("/api/books")
 @Tag(name = "Libros", description = "Gestión del inventario y catálogo de libros")
@@ -17,10 +17,12 @@ public class BookController {
 
     private final BookService bookService;
     private final BookValidator bookValidator;
+    private final BookMapper bookMapper;
 
-    public BookController(BookService bookService, BookValidator bookValidator) {
+    public BookController(BookService bookService, BookValidator bookValidator, BookMapper bookMapper) {
         this.bookService = bookService;
         this.bookValidator = bookValidator;
+        this.bookMapper = bookMapper;
     }
 
     @GetMapping
@@ -36,7 +38,7 @@ public class BookController {
     }
 
     @PostMapping
-    @Operation(summary = "Agregar un nuevo libro", description = "Valida la entrada antes de guardar")
+    @Operation(summary = "Agregar un nuevo libro")
     public Book addBook(@RequestBody Book book, @RequestParam int quantity) {
         bookValidator.validate(book);
         return bookService.save(book, quantity);
@@ -45,9 +47,10 @@ public class BookController {
     @PutMapping("/{id}/stock")
     @Operation(summary = "Actualizar stock de un libro")
     public void updateStock(@PathVariable String id, @RequestParam int quantity) {
-        Book book = bookService.findById(id);
-        if (book != null) {
-            bookService.updateStock(book, quantity);
+        var bookEntity = bookService.findEntityById(id);
+        if (bookEntity != null) {
+            bookEntity.setAvailableStock(quantity);
+            bookService.saveEntity(bookEntity);
         } else {
             throw new RuntimeException("Libro no encontrado con ID: " + id);
         }

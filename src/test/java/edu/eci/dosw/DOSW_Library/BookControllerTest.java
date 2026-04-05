@@ -5,6 +5,7 @@ package edu.eci.dosw.DOSW_Library;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.eci.dosw.DOSW_Library.Controller.BookController;
 import edu.eci.dosw.DOSW_Library.Modelo.Book;
+import edu.eci.dosw.DOSW_Library.Persistence.Mapper.BookMapper;
 import edu.eci.dosw.DOSW_Library.Service.BookService;
 import edu.eci.dosw.DOSW_Library.Validator.BookValidator;
 import org.junit.jupiter.api.Test;
@@ -38,6 +39,9 @@ class BookControllerTest {
 
     @MockitoBean
     private BookValidator bookValidator;
+
+    @MockitoBean
+    private BookMapper bookMapper;
 
     @Test
     void shouldGetAllBooks() throws Exception {
@@ -74,7 +78,6 @@ class BookControllerTest {
                         .content(objectMapper.writeValueAsString(book)))
                 .andExpect(status().isOk());
 
-        // Verifications que se llamó al validador
         verify(bookValidator).validate(any(Book.class));
     }
 

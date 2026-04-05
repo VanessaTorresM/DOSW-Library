@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Book {
-    private String Id;
+    private String id;
     private String author;
     private String title;
 }

@@ -2,44 +2,55 @@ package edu.eci.dosw.DOSW_Library;
 
 import edu.eci.dosw.DOSW_Library.Controller.LoanController;
 import edu.eci.dosw.DOSW_Library.Modelo.loan;
+import edu.eci.dosw.DOSW_Library.Persistence.Entidades.LoanEntity;
+import edu.eci.dosw.DOSW_Library.Persistence.Mapper.LoanMapper;
 import edu.eci.dosw.DOSW_Library.Service.LoanService;
-import edu.eci.dosw.DOSW_Library.Validator.LoanValidator;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
+import java.util.Collections;
+
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(LoanController.class)
-@TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 class LoanControllerTest {
+
+    @Autowired
     private MockMvc mockMvc;
 
     @MockitoBean
     private LoanService loanService;
 
     @MockitoBean
-    private LoanValidator loanValidator;
-
-    @BeforeEach
-    void setUp(WebApplicationContext webApplicationContext) {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-    }
+    private LoanMapper loanMapper;
 
     @Test
     void shouldCreateLoan() throws Exception {
-        when(loanService.createLoan("u1", "b1")).thenReturn(new loan());
+        LoanEntity mockEntity = new LoanEntity();
+        when(loanService.createLoan("u1", "b1")).thenReturn(mockEntity);
+
+        when(loanMapper.toModel(any(LoanEntity.class))).thenReturn(new loan());
 
         mockMvc.perform(post("/api/loans")
                         .param("userId", "u1")
                         .param("bookId", "b1"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void shouldGetAllLoans() throws Exception {
+        when(loanService.getAllLoans()).thenReturn(Collections.singletonList(new LoanEntity()));
+
+        when(loanMapper.toModel(any(LoanEntity.class))).thenReturn(new loan());
+
+        mockMvc.perform(get("/api/loans"))
                 .andExpect(status().isOk());
     }
 }

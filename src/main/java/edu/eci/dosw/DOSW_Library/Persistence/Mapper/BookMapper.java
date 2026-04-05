@@ -8,9 +8,11 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface BookMapper {
 
-    @Mapping(source = "availableStock", target = "stock")
+    @Mapping(source = "bookId", target = "id")
     Book toModel(BookEntity entity);
 
-    @Mapping(source = "stock", target = "availableStock")
+    @Mapping(source = "id", target = "bookId")
+    @Mapping(target = "availableStock", ignore = true)
+    @Mapping(target = "totalStock", ignore = true)
     BookEntity toEntity(Book model);
 }

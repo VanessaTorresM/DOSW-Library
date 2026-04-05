@@ -37,18 +37,31 @@ public class BookService {
                 .collect(Collectors.toList());
     }
 
-    public Book save(Book book) {
+    public Book save(Book book, int quantity) {
         BookEntity entity = bookMapper.toEntity(book);
+        entity.setAvailableStock(quantity);
         BookEntity savedEntity = bookRepository.save(entity);
         return bookMapper.toModel(savedEntity);
     }
 
-    // Método para el LoanService: usa la entidad directamente
     public void saveEntity(BookEntity bookEntity) {
         bookRepository.save(bookEntity);
     }
 
     public BookEntity findEntityById(String id) {
         return bookRepository.findById(id).orElse(null);
+    }
+
+    public void updateStock(Book book, int newQuantity) {
+        BookEntity entity = bookRepository.findById(book.getId()).orElse(null);
+        if (entity != null) {
+            entity.setAvailableStock(newQuantity);
+            bookRepository.save(entity);
+        }
+    }
+
+    public int getStock(Book book) {
+        BookEntity entity = bookRepository.findById(book.getId()).orElse(null);
+        return (entity != null) ? entity.getAvailableStock() : 0;
     }
 }

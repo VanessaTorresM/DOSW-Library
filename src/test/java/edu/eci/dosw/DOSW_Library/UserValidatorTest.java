@@ -22,7 +22,7 @@ class UserValidatorTest {
     @Test
     void shouldThrowExceptionWhenIdIsMissing() {
         User user = new User();
-        user.setId(null); // ID faltante
+        user.setId(null);
         user.setName("Vanessa");
 
         LibraryException exception = assertThrows(LibraryException.class,

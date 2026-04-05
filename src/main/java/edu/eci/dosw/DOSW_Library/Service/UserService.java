@@ -20,7 +20,6 @@ public class UserService {
     }
 
     public List<User> findAll() {
-        // Programación funcional: Entidad -> Modelo
         return userRepository.findAll().stream()
                 .map(userMapper::toModel)
                 .collect(Collectors.toList());

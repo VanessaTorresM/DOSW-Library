@@ -3,6 +3,7 @@ package edu.eci.dosw.DOSW_Library;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.eci.dosw.DOSW_Library.Controller.UserController;
 import edu.eci.dosw.DOSW_Library.Modelo.User;
+import edu.eci.dosw.DOSW_Library.Persistence.Mapper.UserMapper;
 import edu.eci.dosw.DOSW_Library.Service.UserService;
 import edu.eci.dosw.DOSW_Library.Validator.UserValidator;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,6 +35,9 @@ class UserControllerTest {
 
     @MockitoBean
     private UserValidator userValidator;
+
+    @MockitoBean
+    private UserMapper userMapper;
 
     @BeforeEach
     void setUp(WebApplicationContext webApplicationContext) {
