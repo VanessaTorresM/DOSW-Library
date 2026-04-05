@@ -1,6 +1,6 @@
 package edu.eci.dosw.DOSW_Library.Controller;
 
-import edu.eci.dosw.DOSW_Library.Modelo.loan;
+import edu.eci.dosw.DOSW_Library.Modelo.Loan;
 import edu.eci.dosw.DOSW_Library.Persistence.Entidades.LoanEntity;
 import edu.eci.dosw.DOSW_Library.Persistence.Mapper.LoanMapper;
 import edu.eci.dosw.DOSW_Library.Service.LoanService;
@@ -26,14 +26,14 @@ public class LoanController {
 
     @PostMapping
     @Operation(summary = "Crear un nuevo préstamo")
-    public loan createLoan(@RequestParam String userId, @RequestParam String bookId) {
+    public Loan createLoan(@RequestParam String userId, @RequestParam String bookId) {
         LoanEntity newLoan = loanService.createLoan(userId, bookId);
         return loanMapper.toModel(newLoan);
     }
 
     @GetMapping
     @Operation(summary = "Historial de préstamos")
-    public List<loan> getAllLoans() {
+    public List<Loan> getAllLoans() {
         return loanService.getAllLoans().stream()
                 .map(loanMapper::toModel)
                 .collect(Collectors.toList());

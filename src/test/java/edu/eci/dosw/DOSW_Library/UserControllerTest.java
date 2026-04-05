@@ -1,6 +1,7 @@
 package edu.eci.dosw.DOSW_Library;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import edu.eci.dosw.DOSW_Library.Controller.BookController;
 import edu.eci.dosw.DOSW_Library.Controller.UserController;
 import edu.eci.dosw.DOSW_Library.Modelo.User;
 import edu.eci.dosw.DOSW_Library.Persistence.Mapper.UserMapper;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -23,8 +25,8 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(UserController.class)
-@TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
+@WebMvcTest(controllers = UserController.class)
+@ContextConfiguration(classes = UserController.class)
 class UserControllerTest {
 
     private MockMvc mockMvc;

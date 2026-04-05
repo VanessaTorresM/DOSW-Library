@@ -6,7 +6,7 @@ import java.util.Date;
 
 @Data
 public class LoanDTO {
-    private Long loanId;
+    private Long id;
     private UserDTO user;
     private BookDTO book;
     private Date loanDate;

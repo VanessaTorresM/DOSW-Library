@@ -1,31 +1,26 @@
+
 package edu.eci.dosw.DOSW_Library;
 
-
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-import edu.eci.dosw.DOSW_Library.Controller.BookController;
 import edu.eci.dosw.DOSW_Library.Modelo.Book;
-import edu.eci.dosw.DOSW_Library.Persistence.Mapper.BookMapper;
-import edu.eci.dosw.DOSW_Library.Service.BookService;
-import edu.eci.dosw.DOSW_Library.Validator.BookValidator;
+import edu.eci.dosw.DOSW_Library.Persistence.Entidades.BookEntity;
+import edu.eci.dosw.DOSW_Library.Persistence.Repositorios.BookRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import org.springframework.test.context.bean.override.mockito.MockitoBean; // Nuevo Import
-
-@WebMvcTest(BookController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
+@ActiveProfiles("test")
+@Transactional
 class BookControllerTest {
 
     @Autowired
@@ -34,62 +29,58 @@ class BookControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @MockitoBean
-    private BookService bookService;
-
-    @MockitoBean
-    private BookValidator bookValidator;
-
-    @MockitoBean
-    private BookMapper bookMapper;
-
-    @Test
-    void shouldGetAllBooks() throws Exception {
-        when(bookService.findAll()).thenReturn(Collections.emptyList());
-
-        mockMvc.perform(get("/api/books"))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    void shouldGetBookById() throws Exception {
-        Book book = new Book();
-        book.setId("b1");
-        book.setTitle("Clean Code");
-
-        when(bookService.findById("b1")).thenReturn(book);
-
-        mockMvc.perform(get("/api/books/b1"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value("b1"));
-    }
+    @Autowired
+    private BookRepository bookRepository;
 
     @Test
     void shouldSaveBook() throws Exception {
         Book book = new Book();
-        book.setId("b2");
-        book.setTitle("Refactoring");
-
-        when(bookService.save(any(Book.class), anyInt())).thenReturn(book);
+        book.setId("b-vanessa-1");
+        book.setTitle("Prueba Real");
+        book.setAuthor("Vanessa");
 
         mockMvc.perform(post("/api/books")
                         .param("quantity", "10")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(book)))
                 .andExpect(status().isOk());
+    }
 
-        verify(bookValidator).validate(any(Book.class));
+    @Test
+    void shouldGetAllBooks() throws Exception {
+        mockMvc.perform(get("/api/books"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void shouldGetBookById() throws Exception {
+        BookEntity entity = new BookEntity();
+        entity.setBookId("b20");
+        entity.setTitle("Libro Existente");
+        entity.setAuthor("Autor");
+        entity.setAvailableStock(5);
+        entity.setTotalStock(5);
+        bookRepository.save(entity);
+
+        mockMvc.perform(get("/api/books/b20"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value("Libro Existente"));
     }
 
     @Test
     void shouldUpdateStock() throws Exception {
-        Book book = new Book();
-        book.setId("b1");
-
-        when(bookService.findById("b1")).thenReturn(book);
+        BookEntity entity = new BookEntity();
+        entity.setBookId("b1");
+        entity.setTitle("Libro para Update");
+        entity.setAuthor("Autor");
+        entity.setAvailableStock(10);
+        entity.setTotalStock(10);
+        bookRepository.save(entity);
 
         mockMvc.perform(put("/api/books/b1/stock")
-                        .param("quantity", "20"))
+                        .param("quantity", "50"))
                 .andExpect(status().isOk());
+
+        System.out.println("Nuevo stock: " + bookRepository.findById("b1").get().getAvailableStock());
     }
 }

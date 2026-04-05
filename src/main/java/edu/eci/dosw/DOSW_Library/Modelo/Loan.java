@@ -9,7 +9,7 @@ import java.util.Date;
 @Data
 @Getter
 @Setter
-public class loan {
+public class Loan {
     private Book book;
     private User user;
     private Date loandate;

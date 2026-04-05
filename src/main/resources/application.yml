@@ -15,8 +15,9 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: update # Esto creará las tablas automáticamente al iniciar
-    show-sql: true # Muestra las consultas SQL en la consola para depuración
+      ddl-auto: create-drop
+    show-sql: true
+
     properties:
       hibernate:
         format_sql: true

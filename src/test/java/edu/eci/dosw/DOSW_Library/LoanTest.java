@@ -1,7 +1,7 @@
 package edu.eci.dosw.DOSW_Library;
 
 
-import edu.eci.dosw.DOSW_Library.Modelo.loan;
+import edu.eci.dosw.DOSW_Library.Modelo.Loan;
 import org.junit.jupiter.api.Test;
 import java.util.Date;
 import static org.junit.jupiter.api.Assertions.*;
@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class LoanTest {
     @Test
     void testLoanFull() {
-        loan loan1 = new loan();
+        Loan loan1 = new Loan();
         Date fecha = new Date();
 
         loan1.setLoandate(fecha);
@@ -19,7 +19,7 @@ class LoanTest {
         assertEquals("Active", loan1.getStatus());
 
         // Test para Equals y HashCode
-        loan loan2 = new loan();
+        Loan loan2 = new Loan();
         loan2.setLoandate(fecha);
         loan2.setStatus("Active");
 

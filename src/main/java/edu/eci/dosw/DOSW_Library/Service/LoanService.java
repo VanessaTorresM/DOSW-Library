@@ -1,7 +1,5 @@
 package edu.eci.dosw.DOSW_Library.Service;
-import edu.eci.dosw.DOSW_Library.Modelo.Book;
-import edu.eci.dosw.DOSW_Library.Modelo.User;
-import edu.eci.dosw.DOSW_Library.Modelo.loan;
+import edu.eci.dosw.DOSW_Library.Modelo.Loan;
 import edu.eci.dosw.DOSW_Library.Persistence.Entidades.BookEntity;
 import edu.eci.dosw.DOSW_Library.Persistence.Entidades.LoanEntity;
 import edu.eci.dosw.DOSW_Library.Persistence.Entidades.UserEntity;
@@ -11,7 +9,6 @@ import edu.eci.dosw.DOSW_Library.Util.ValidationUtil;
 import org.springframework.stereotype.Service;
 import edu.eci.dosw.DOSW_Library.Validator.LoanValidator;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -48,7 +45,7 @@ public class LoanService {
         newLoanEntity.setLoanDate(new Date());
         newLoanEntity.setStatus("active");
 
-        loan loanModelParaValidar = loanMapper.toModel(newLoanEntity);
+        Loan loanModelParaValidar = loanMapper.toModel(newLoanEntity);
 
         loanValidator.validateLoan(loanModelParaValidar);
         validationUtil.checkAvailability(bookEntity.getAvailableStock());
