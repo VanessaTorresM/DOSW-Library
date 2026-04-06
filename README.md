@@ -36,3 +36,6 @@ https://youtu.be/uvXhNBVr9IE?si=wKeUfBRbuZLsMHq9
 
 El diagrama de entidad relación presenta la estructura de la base de datos en tercera forma normal, enfocándose en la gestión de inventario y seguridad mediante tres tablas principales. La tabla Loan funciona como el punto de unión central, utilizando llaves foráneas para conectar a un único User y a un único Book con cada registro de préstamo, lo que establece relaciones de uno a muchos donde un usuario puede realizar múltiples solicitudes y un libro puede aparecer en diversos préstamos a lo largo del tiempo.
 
+## Video de la conexión con la base de datos 
+https://youtu.be/xMdPkjSlrc8
+
