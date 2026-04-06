@@ -1,7 +1,6 @@
 package edu.eci.dosw.DOSW_Library;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import edu.eci.dosw.DOSW_Library.Persistence.Entidades.UserEntity;
 import edu.eci.dosw.DOSW_Library.Persistence.Repositorios.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
