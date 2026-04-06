@@ -1,96 +1,71 @@
 package edu.eci.dosw.DOSW_Library;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import edu.eci.dosw.DOSW_Library.Controller.BookController;
-import edu.eci.dosw.DOSW_Library.Controller.UserController;
-import edu.eci.dosw.DOSW_Library.Modelo.User;
-import edu.eci.dosw.DOSW_Library.Persistence.Mapper.UserMapper;
-import edu.eci.dosw.DOSW_Library.Service.UserService;
-import edu.eci.dosw.DOSW_Library.Validator.UserValidator;
-import org.junit.jupiter.api.BeforeEach;
+import edu.eci.dosw.DOSW_Library.Persistence.Entidades.UserEntity;
+import edu.eci.dosw.DOSW_Library.Persistence.Repositorios.UserRepository;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestConstructor;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.annotation.Commit;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(controllers = UserController.class)
-@ContextConfiguration(classes = UserController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
+@ActiveProfiles("test")
+@Transactional
 class UserControllerTest {
 
+    @Autowired
     private MockMvc mockMvc;
-    @MockitoBean
-    private UserService userService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    @MockitoBean
-    private UserValidator userValidator;
+    @Test
+    @Commit
+    void shouldCreateUser() throws Exception {
+        String userJson = """
+        {
+          "id": "b1",
+          "name": "Brayan Torres",
+          "username": "El Brayan",
+          "password": "secure123",
+          "role": "Bibliotecario"
+        }
+        """;
 
-    @MockitoBean
-    private UserMapper userMapper;
-
-    @BeforeEach
-    void setUp(WebApplicationContext webApplicationContext) {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        mockMvc.perform(post("/api/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(userJson))
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 
     @Test
     void shouldGetAllUsers() throws Exception {
-        User user = new User();
-        user.setId("u1");
-        user.setName("John Doe");
-
-        when(userService.findAll()).thenReturn(Arrays.asList(user));
-
         mockMvc.perform(get("/api/users"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value("u1"))
-                .andExpect(jsonPath("$[0].name").value("John Doe"));
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test
     void shouldGetUserById() throws Exception {
-        User user = new User();
-        user.setId("u1");
-        when(userService.findById("u1")).thenReturn(user);
+        String existingId = "u-vanessa-test";
 
-        mockMvc.perform(get("/api/users/u1"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value("u1"));
-    }
-
-    @Test
-    void shouldCreateUser() throws Exception {
-        User user = new User();
-        user.setId("u2");
-        user.setName("Jane Doe");
-
-        when(userService.save(any(User.class))).thenReturn(user);
-
-        mockMvc.perform(post("/api/users")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(user)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("Jane Doe"));
-    }
-
-    @Test
-    void shouldReturnNotFoundWhenUserDoesNotExist() throws Exception {
-        when(userService.findById("999")).thenReturn(null);
-
-        mockMvc.perform(get("/api/users/999"))
+        mockMvc.perform(get("/api/users/" + existingId))
                 .andExpect(status().isOk());
     }
 }

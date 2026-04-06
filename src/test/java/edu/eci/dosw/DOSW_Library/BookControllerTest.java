@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +34,7 @@ class BookControllerTest {
     private BookRepository bookRepository;
 
     @Test
+    @Commit
     void shouldSaveBook() throws Exception {
         Book book = new Book();
         book.setId("b-vanessa-1");
@@ -55,7 +57,7 @@ class BookControllerTest {
     @Test
     void shouldGetBookById() throws Exception {
         BookEntity entity = new BookEntity();
-        entity.setBookId("b20");
+        entity.setId("b20");
         entity.setTitle("Libro Existente");
         entity.setAuthor("Autor");
         entity.setAvailableStock(5);
@@ -68,9 +70,10 @@ class BookControllerTest {
     }
 
     @Test
+    @Commit
     void shouldUpdateStock() throws Exception {
         BookEntity entity = new BookEntity();
-        entity.setBookId("b1");
+        entity.setId("b1");
         entity.setTitle("Libro para Update");
         entity.setAuthor("Autor");
         entity.setAvailableStock(10);

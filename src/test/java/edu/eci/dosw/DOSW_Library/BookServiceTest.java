@@ -40,7 +40,7 @@ class BookServiceTest {
         bookModel = new Book("b1", "Martin Fowler", "Refactoring");
 
         bookEntity = new BookEntity();
-        bookEntity.setBookId("b1");
+        bookEntity.setId("b1");
         bookEntity.setTitle("Refactoring");
         bookEntity.setAuthor("Martin Fowler");
         bookEntity.setTotalStock(10);
@@ -57,7 +57,7 @@ class BookServiceTest {
 
         assertNotNull(saved);
         verify(bookRepository).save(argThat(entity ->
-                entity.getAvailableStock() == 10 && entity.getBookId().equals("b1")
+                entity.getAvailableStock() == 10 && entity.getId().equals("b1")
         ));
     }
 
@@ -101,7 +101,7 @@ class BookServiceTest {
         BookEntity entityFound = bookService.findEntityById("b1");
 
         assertNotNull(entityFound);
-        assertEquals("b1", entityFound.getBookId());
+        assertEquals("b1", entityFound.getId());
         assertEquals(10, entityFound.getAvailableStock());
     }
 }

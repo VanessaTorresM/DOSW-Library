@@ -20,7 +20,7 @@ public class LoanService {
     private final UserService userService;
     private final ValidationUtil validationUtil;
     private final LoanValidator loanValidator;
-    private final LoanMapper loanMapper; // 1. Inyectamos el Mapper
+    private final LoanMapper loanMapper;
 
     public LoanService(LoanRepository loanRepository, BookService bookService,
                        UserService userService, ValidationUtil validationUtil,
@@ -38,7 +38,6 @@ public class LoanService {
         UserEntity userEntity = userService.findEntityById(userId);
         BookEntity bookEntity = bookService.findEntityById(bookId);
 
-        // 2. Preparamos la entidad de préstamo
         LoanEntity newLoanEntity = new LoanEntity();
         newLoanEntity.setUser(userEntity);
         newLoanEntity.setBook(bookEntity);
@@ -51,9 +50,7 @@ public class LoanService {
         validationUtil.checkAvailability(bookEntity.getAvailableStock());
 
         bookEntity.setAvailableStock(bookEntity.getAvailableStock() - 1);
-        bookService.saveEntity(bookEntity); // Usamos el método que guarda la entidad
-
-        // 6. Guardamos el préstamo
+        bookService.saveEntity(bookEntity);
         return loanRepository.save(newLoanEntity);
     }
 

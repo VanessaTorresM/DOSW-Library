@@ -43,7 +43,7 @@ class LoanServiceTest {
     @Test
     void shouldCreateLoanSuccessfullyWhenStockAvailable() {
         UserEntity userE = new UserEntity(); userE.setUserId("u1");
-        BookEntity bookE = new BookEntity(); bookE.setBookId("b1"); bookE.setAvailableStock(1);
+        BookEntity bookE = new BookEntity(); bookE.setId("b1"); bookE.setAvailableStock(1);
 
         when(userService.findEntityById("u1")).thenReturn(userE);
         when(bookService.findEntityById("b1")).thenReturn(bookE);

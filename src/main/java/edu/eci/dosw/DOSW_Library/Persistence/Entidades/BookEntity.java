@@ -9,7 +9,7 @@ import lombok.Data;
 public class BookEntity {
     @Id
     @Column(name = "id")
-    private String bookId;
+    private String id;
 
     @Column(nullable = false)
     private String title;
