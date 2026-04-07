@@ -61,4 +61,27 @@ public class LoanService {
     public List<LoanEntity> getLoansByUser(String userId) {
         return loanRepository.findByUser_UserId(userId);
     }
+
+    public List<LoanEntity> getLoansByUserId(String userId) {
+        return loanRepository.findByUser_UserId(userId);
+    }
+
+
+    public LoanEntity returnLoan(Long loanId) {
+        LoanEntity loan = loanRepository.findById(loanId)
+                .orElseThrow(() -> new RuntimeException("Préstamo no encontrado"));
+
+        if ("RETURNED".equals(loan.getStatus())) {
+        throw new RuntimeException("El libro ya ha sido devuelto");
+        }
+
+        BookEntity book = loan.getBook();
+        book.setAvailableStock(book.getAvailableStock() + 1);
+        bookService.saveEntity(book);
+
+        loan.setStatus("RETURNED");
+        loan.setReturnedDate(new Date());
+
+        return loanRepository.save(loan);
+    }
 }

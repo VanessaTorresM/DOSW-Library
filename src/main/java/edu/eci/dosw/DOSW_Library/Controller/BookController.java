@@ -6,6 +6,7 @@ import edu.eci.dosw.DOSW_Library.Service.BookService;
 import edu.eci.dosw.DOSW_Library.Validator.BookValidator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,18 +27,21 @@ public class BookController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('USER', 'LIBRARIAN')") // Ambos pueden ver el catálogo
     @Operation(summary = "Obtener todos los libros")
     public List<Book> getAllBooks() {
         return bookService.findAll();
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER', 'LIBRARIAN')")
     @Operation(summary = "Buscar libro por ID")
     public Book getBookById(@PathVariable String id) {
         return bookService.findById(id);
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('LIBRARIAN')") // Solo bibliotecario gestiona libros
     @Operation(summary = "Agregar un nuevo libro")
     public Book addBook(@RequestBody Book book, @RequestParam int quantity) {
         bookValidator.validate(book);
@@ -45,6 +49,7 @@ public class BookController {
     }
 
     @PutMapping("/{id}/stock")
+    @PreAuthorize("hasRole('LIBRARIAN')") // Solo bibliotecario actualiza stock
     @Operation(summary = "Actualizar stock de un libro")
     public void updateStock(@PathVariable String id, @RequestParam int quantity) {
         var bookEntity = bookService.findEntityById(id);
@@ -56,3 +61,7 @@ public class BookController {
         }
     }
 }
+
+
+
+
