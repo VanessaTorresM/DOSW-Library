@@ -27,24 +27,40 @@ public class UserController {
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('LIBRARIAN')")
+    @PreAuthorize("hasAnyRole('LIBRARIAN', 'ADMIN')")
     @Operation(summary = "Listar todos los usuarios")
     public List<User> getAllUsers() {
         return userService.findAll();
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('USER', 'LIBRARIAN')")
+    @PreAuthorize("hasAnyRole('USER', 'LIBRARIAN', 'ADMIN')")
     @Operation(summary = "Obtener detalles de un usuario")
     public User getUserById(@PathVariable String id) {
         return userService.findById(id);
     }
 
-    @PostMapping
-    @PreAuthorize("hasRole('LIBRARIAN')")
-    @Operation(summary = "Registrar nuevo usuario")
+    @PostMapping("/register")
+    @Operation(summary = "Registro público para nuevos usuarios (USER)")
     public User registerUser(@RequestBody User user) {
+        userValidator.validate(user);
+        user.setRole("USER");
+        return userService.save(user);
+    }
+
+    @PostMapping("/admin/register-staff")
+    @PreAuthorize("hasAnyRole('LIBRARIAN', 'ADMIN')")
+    @Operation(summary = "Registrar personal (Bibliotecarios o Admins)")
+    public User registerStaff(@RequestBody User user) {
         userValidator.validate(user);
         return userService.save(user);
     }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Eliminar un usuario del sistema")
+    public void deleteUser(@PathVariable String id) {
+        userService.deleteById(id);
+    }
 }
+

@@ -26,16 +26,14 @@ public class LoanController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('USER', 'LIBRARIAN')")
-    @Operation(summary = "Crear un nuevo préstamo")
+    @PreAuthorize("hasAnyRole('USER', 'LIBRARIAN', 'ADMIN')")
     public Loan createLoan(@RequestParam String userId, @RequestParam String bookId) {
         LoanEntity newLoan = loanService.createLoan(userId, bookId);
         return loanMapper.toModel(newLoan);
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('LIBRARIAN')")
-    @Operation(summary = "Historial global de préstamos")
+    @PreAuthorize("hasAnyRole('LIBRARIAN', 'ADMIN')")
     public List<Loan> getAllLoans() {
         return loanService.getAllLoans().stream()
                 .map(loanMapper::toModel)
@@ -43,8 +41,7 @@ public class LoanController {
     }
 
     @GetMapping("/user/{userId}")
-    @PreAuthorize("#userId == authentication.name or hasRole('LIBRARIAN')")
-    @Operation(summary = "Historial de préstamos por usuario")
+    @PreAuthorize("#userId == authentication.name or hasAnyRole('LIBRARIAN', 'ADMIN')")
     public List<Loan> getLoansByUserId(@PathVariable String userId) {
         return loanService.getLoansByUserId(userId).stream()
                 .map(loanMapper::toModel)
@@ -52,8 +49,7 @@ public class LoanController {
     }
 
     @PutMapping("/{loanId}/return")
-    @PreAuthorize("hasAnyRole('USER', 'LIBRARIAN')")
-    @Operation(summary = "Devolver un libro")
+    @PreAuthorize("hasAnyRole('USER', 'LIBRARIAN', 'ADMIN')")
     public Loan returnBook(@PathVariable Long loanId) {
         LoanEntity returnedLoan = loanService.returnLoan(loanId);
         return loanMapper.toModel(returnedLoan);

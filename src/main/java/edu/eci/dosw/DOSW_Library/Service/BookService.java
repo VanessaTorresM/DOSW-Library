@@ -64,4 +64,11 @@ public class BookService {
         BookEntity entity = bookRepository.findById(book.getId()).orElse(null);
         return (entity != null) ? entity.getAvailableStock() : 0;
     }
+
+    public void deleteById(String id) {
+        if (!bookRepository.existsById(id)) {
+            throw new RuntimeException("Libro no encontrado con ID: " + id);
+        }
+        bookRepository.deleteById(id);
+    }
 }

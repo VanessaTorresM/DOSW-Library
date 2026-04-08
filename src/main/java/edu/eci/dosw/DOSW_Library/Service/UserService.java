@@ -40,4 +40,10 @@ public class UserService {
     public UserEntity findEntityById(String id) {
         return userRepository.findById(id).orElse(null);
     }
+    public void deleteById(String id) {
+        if (!userRepository.existsById(id)) {
+            throw new RuntimeException("Usuario no encontrado con ID: " + id);
+        }
+        userRepository.deleteById(id);
+    }
 }

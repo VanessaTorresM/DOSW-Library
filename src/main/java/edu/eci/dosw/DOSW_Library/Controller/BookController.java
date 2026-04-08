@@ -27,21 +27,21 @@ public class BookController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('USER', 'LIBRARIAN')") // Ambos pueden ver el catálogo
+    @PreAuthorize("hasAnyRole('USER', 'LIBRARIAN', 'ADMIN')") // Todos pueden ver [cite: 95]
     @Operation(summary = "Obtener todos los libros")
     public List<Book> getAllBooks() {
         return bookService.findAll();
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('USER', 'LIBRARIAN')")
+    @PreAuthorize("hasAnyRole('USER', 'LIBRARIAN', 'ADMIN')")
     @Operation(summary = "Buscar libro por ID")
     public Book getBookById(@PathVariable String id) {
         return bookService.findById(id);
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('LIBRARIAN')") // Solo bibliotecario gestiona libros
+    @PreAuthorize("hasAnyRole('LIBRARIAN', 'ADMIN')") // Solo personal autorizado [cite: 87]
     @Operation(summary = "Agregar un nuevo libro")
     public Book addBook(@RequestBody Book book, @RequestParam int quantity) {
         bookValidator.validate(book);
@@ -49,7 +49,7 @@ public class BookController {
     }
 
     @PutMapping("/{id}/stock")
-    @PreAuthorize("hasRole('LIBRARIAN')") // Solo bibliotecario actualiza stock
+    @PreAuthorize("hasAnyRole('LIBRARIAN', 'ADMIN')") // Punto 22: El bibliotecario actualiza stock [cite: 22, 88]
     @Operation(summary = "Actualizar stock de un libro")
     public void updateStock(@PathVariable String id, @RequestParam int quantity) {
         var bookEntity = bookService.findEntityById(id);
@@ -59,6 +59,13 @@ public class BookController {
         } else {
             throw new RuntimeException("Libro no encontrado con ID: " + id);
         }
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('LIBRARIAN', 'ADMIN')") // Nuevo: Permite eliminar libros del catálogo
+    @Operation(summary = "Eliminar un libro permanentemente")
+    public void deleteBook(@PathVariable String id) {
+        bookService.deleteById(id);
     }
 }
 
