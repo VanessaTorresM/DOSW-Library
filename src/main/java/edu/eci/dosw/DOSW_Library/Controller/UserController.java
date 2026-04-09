@@ -44,7 +44,6 @@ public class UserController {
     @Operation(summary = "Registro público para nuevos usuarios (USER)")
     public User registerUser(@RequestBody User user) {
         userValidator.validate(user);
-        user.setRole("USER");
         return userService.save(user);
     }
 

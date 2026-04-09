@@ -13,7 +13,6 @@ public class DataInitializer {
     @Bean
     CommandLineRunner initDatabase(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         return args -> {
-            // Revisamos si ya existe un admin para no duplicarlo
             if (userRepository.findByUsername("admin").isEmpty()) {
                 UserEntity admin = new UserEntity();
                 admin.setUserId("ADMIN-01");
@@ -21,8 +20,10 @@ public class DataInitializer {
                 admin.setPassword(passwordEncoder.encode("admin123"));
                 admin.setRole("ADMIN");
 
+                admin.setName("Administrador del Sistema");
+
                 userRepository.save(admin);
-                System.out.println("### Usuario ADMIN creado por defecto (admin / admin123) ###");
+                System.out.println("### Usuario ADMIN creado con éxito ###");
             }
         };
     }

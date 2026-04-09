@@ -7,17 +7,17 @@ import edu.eci.dosw.DOSW_Library.Persistence.Repositorios.UserRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import lombok.RequiredArgsConstructor;
 
-
+@RequiredArgsConstructor
 @Service
 public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, UserMapper userMapper) {
-        this.userRepository = userRepository;
-        this.userMapper = userMapper;
-    }
+
 
     public List<User> findAll() {
         return userRepository.findAll().stream()
@@ -33,7 +33,11 @@ public class UserService {
 
     public User save(User user) {
         UserEntity entity = userMapper.toEntity(user);
+
+        entity.setPassword(passwordEncoder.encode(entity.getPassword()));
+
         UserEntity savedEntity = userRepository.save(entity);
+
         return userMapper.toModel(savedEntity);
     }
 

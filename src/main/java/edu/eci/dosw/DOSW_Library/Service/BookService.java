@@ -37,9 +37,8 @@ public class BookService {
                 .collect(Collectors.toList());
     }
 
-    public Book save(Book book, int quantity) {
+    public Book save(Book book) {
         BookEntity entity = bookMapper.toEntity(book);
-        entity.setAvailableStock(quantity);
         BookEntity savedEntity = bookRepository.save(entity);
         return bookMapper.toModel(savedEntity);
     }

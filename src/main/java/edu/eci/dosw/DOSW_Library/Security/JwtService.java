@@ -17,12 +17,12 @@ import java.util.function.Function;
 public class JwtService {
 
     private static final String SECRET_KEY = "NDI0MjQyNDI0MjQyNDI0MjQyNDI0MjQyNDI0MjQyNDI0MjQyNDI0Mg==";
-    private static final long EXPIRATION_TIME = 3600000; // 1 hora de TTL
+    private static final long EXPIRATION_TIME = 3600000;
 
     public String generateToken(UserEntity user) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("role", user.getRole()); // [cite: 71]
-        claims.put("userId", user.getUserId()); // [cite: 70]
+        claims.put("role", user.getRole());
+        claims.put("userId", user.getUserId());
 
         return Jwts.builder()
                 .setClaims(claims)

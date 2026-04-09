@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class BookDTO {
-    private String bookId;
+    private String id;
     private String title;
     private String author;
     private int availableStock;

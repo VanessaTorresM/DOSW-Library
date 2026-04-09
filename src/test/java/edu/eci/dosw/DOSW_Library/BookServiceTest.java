@@ -53,7 +53,7 @@ class BookServiceTest {
         when(bookRepository.save(any(BookEntity.class))).thenReturn(bookEntity);
         when(bookMapper.toModel(any(BookEntity.class))).thenReturn(bookModel);
 
-        Book saved = bookService.save(bookModel, 10);
+        Book saved = bookService.save(bookModel);
 
         assertNotNull(saved);
         verify(bookRepository).save(argThat(entity ->

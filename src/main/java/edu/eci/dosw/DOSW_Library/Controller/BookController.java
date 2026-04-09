@@ -27,7 +27,7 @@ public class BookController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('USER', 'LIBRARIAN', 'ADMIN')") // Todos pueden ver [cite: 95]
+    @PreAuthorize("hasAnyRole('USER', 'LIBRARIAN', 'ADMIN')")
     @Operation(summary = "Obtener todos los libros")
     public List<Book> getAllBooks() {
         return bookService.findAll();
@@ -41,15 +41,15 @@ public class BookController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('LIBRARIAN', 'ADMIN')") // Solo personal autorizado [cite: 87]
+    @PreAuthorize("hasAnyRole('LIBRARIAN', 'ADMIN')")
     @Operation(summary = "Agregar un nuevo libro")
-    public Book addBook(@RequestBody Book book, @RequestParam int quantity) {
+    public Book addBook(@RequestBody Book book) {
         bookValidator.validate(book);
-        return bookService.save(book, quantity);
+        return bookService.save(book);
     }
 
     @PutMapping("/{id}/stock")
-    @PreAuthorize("hasAnyRole('LIBRARIAN', 'ADMIN')") // Punto 22: El bibliotecario actualiza stock [cite: 22, 88]
+    @PreAuthorize("hasAnyRole('LIBRARIAN', 'ADMIN')")
     @Operation(summary = "Actualizar stock de un libro")
     public void updateStock(@PathVariable String id, @RequestParam int quantity) {
         var bookEntity = bookService.findEntityById(id);
@@ -62,7 +62,7 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('LIBRARIAN', 'ADMIN')") // Nuevo: Permite eliminar libros del catálogo
+    @PreAuthorize("hasAnyRole('LIBRARIAN', 'ADMIN')")
     @Operation(summary = "Eliminar un libro permanentemente")
     public void deleteBook(@PathVariable String id) {
         bookService.deleteById(id);
