@@ -39,3 +39,6 @@ El diagrama de entidad relación presenta la estructura de la base de datos en t
 ## Video de la conexión con la base de datos 
 https://youtu.be/xMdPkjSlrc8
 
+## JWT en postman
+https://youtu.be/IWEpHUQmmPw
+
