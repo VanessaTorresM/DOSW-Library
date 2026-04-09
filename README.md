@@ -11,7 +11,8 @@ Interfaz de Usuario, representa el punto de entrada del sistema donde el usuario
 
 
 ## Diagrama especifico
-<img width="741" height="192" alt="Biblioteca-Página-2 drawio" src="https://github.com/user-attachments/assets/501d186b-53d7-41d3-8aef-a236b0184d3e" />
+<img width="1130" height="386" alt="image" src="https://github.com/user-attachments/assets/84954378-e4d7-4631-b7af-e3fa1033d5c3" />
+
 Este diagrama de especifico muestra cómo está organizada la lógica del proyecto de la biblioteca siguiendo una estructura de capas para cada funcionalidad. En primer lugar, los Mappers se encargan de transformar los datos que vienen de afuera para que los Controladores puedan recibirlos correctamente. Estos Controladores actúan como la puerta de entrada que se conecta con los Services, donde realmente ocurre el procesamiento de la información. Finalmente, los Services se apoyan en los Validators para verificar que todas las reglas de negocio se cumplan, como revisar si un libro está disponible o si los datos del usuario son válidos, asegurando que solo la información correcta llegue a procesarse en el sistema.
 
 
