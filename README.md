@@ -2,7 +2,7 @@
 
 Este sistema es una API REST desarrollada con Spring Boot para la gestión integral de una biblioteca universitaria. Su funcionamiento se basa en la administración de tres entidades principales: Usuarios, Libros y Préstamos. El flujo comienza con el registro de usuarios o de libros, luego el usuario puede hacer un prestamo,  La robustez del proyecto reside en su capa de validaciones y manejo de excepciones, que impide acciones inválidas como prestar un libro sin stock o registrar datos incompletos y responde con mensajes de error claros y estandarizados, garantizando así la integridad de la información en todo momento.
 
-## Diagrama General en vez de interfaz d eusuario biblioteca frontend
+## Diagrama General en vez de interfaz de usuario biblioteca frontend
 <img width="884" height="209" alt="image" src="https://github.com/user-attachments/assets/9bef1617-61b7-4a32-a902-edb238ad6f93" />
 
 Se utiliza un modelo de componentes para visualizar cómo se dividen las responsabilidades del sistema y cómo interactúan entre sí a través de interfaces definidas.
