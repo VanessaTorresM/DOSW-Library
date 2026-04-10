@@ -1,9 +1,9 @@
-package edu.eci.dosw.DOSW_Library.Persistence.Mapper;
+package edu.eci.dosw.DOSW_Library.Persistence.relational.Mapper;
 
 
 import edu.eci.dosw.DOSW_Library.Modelo.User;
 
-import edu.eci.dosw.DOSW_Library.Persistence.Entidades.UserEntity;
+import edu.eci.dosw.DOSW_Library.Persistence.relational.Entidades.UserEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

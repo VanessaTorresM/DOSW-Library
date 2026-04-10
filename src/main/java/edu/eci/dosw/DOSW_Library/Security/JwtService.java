@@ -1,11 +1,13 @@
 package edu.eci.dosw.DOSW_Library.Security;
 
-import edu.eci.dosw.DOSW_Library.Persistence.Entidades.UserEntity;
+import edu.eci.dosw.DOSW_Library.Persistence.nonrelational.Document.UserMongoEntity;
+import edu.eci.dosw.DOSW_Library.Persistence.relational.Entidades.UserEntity;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
@@ -19,17 +21,22 @@ public class JwtService {
     private static final String SECRET_KEY = "NDI0MjQyNDI0MjQyNDI0MjQyNDI0MjQyNDI0MjQyNDI0MjQyNDI0Mg==";
     private static final long EXPIRATION_TIME = 3600000;
 
-    public String generateToken(UserEntity user) {
+    public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("role", user.getRole());
-        claims.put("userId", user.getUserId());
+
+        String role = userDetails.getAuthorities().stream()
+                .findFirst()
+                .map(auth -> auth.getAuthority())
+                .orElse("ROLE_USER");
+
+        claims.put("role", role);
 
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(user.getUsername())
+                .setSubject(userDetails.getUsername()) // admin
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME)) //
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256) // Firma digital [cite: 72, 109]
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 

@@ -1,7 +1,7 @@
-package edu.eci.dosw.DOSW_Library.Persistence.Mapper;
+package edu.eci.dosw.DOSW_Library.Persistence.relational.Mapper;
 
 import edu.eci.dosw.DOSW_Library.Modelo.Book;
-import edu.eci.dosw.DOSW_Library.Persistence.Entidades.BookEntity;
+import edu.eci.dosw.DOSW_Library.Persistence.relational.Entidades.BookEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

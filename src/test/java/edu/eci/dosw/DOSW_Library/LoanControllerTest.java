@@ -1,10 +1,10 @@
 package edu.eci.dosw.DOSW_Library;
 
 
-import edu.eci.dosw.DOSW_Library.Persistence.Entidades.BookEntity;
-import edu.eci.dosw.DOSW_Library.Persistence.Entidades.UserEntity;
-import edu.eci.dosw.DOSW_Library.Persistence.Repositorios.BookRepository;
-import edu.eci.dosw.DOSW_Library.Persistence.Repositorios.UserRepository;
+import edu.eci.dosw.DOSW_Library.Persistence.relational.Entidades.BookEntity;
+import edu.eci.dosw.DOSW_Library.Persistence.relational.Entidades.UserEntity;
+import edu.eci.dosw.DOSW_Library.Persistence.relational.Repositorios.BookRepository;
+import edu.eci.dosw.DOSW_Library.Persistence.relational.Repositorios.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;

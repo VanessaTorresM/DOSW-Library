@@ -1,21 +1,20 @@
-package edu.eci.dosw.DOSW_Library.Persistence.Mapper;
-
+package edu.eci.dosw.DOSW_Library.Persistence.nonrelational.Mapper;
 
 import edu.eci.dosw.DOSW_Library.Modelo.Loan;
-import edu.eci.dosw.DOSW_Library.Persistence.Entidades.LoanEntity;
+import edu.eci.dosw.DOSW_Library.Persistence.nonrelational.Document.LoanMongoEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring", uses = {BookMapper.class, UserMapper.class})
-public interface LoanMapper {
+@Mapper(componentModel = "spring", implementationName = "LoanMongoMapperImpl", uses = {BookMongoMapper.class, UserMongoMapper.class})
+public interface LoanMongoMapper {
 
     @Mapping(source = "book", target = "book")
     @Mapping(source = "user", target = "user")
     @Mapping(source = "loanDate", target = "loandate")
-    Loan toModel(LoanEntity entity);
+    Loan toModel(LoanMongoEntity entity);
 
     @Mapping(source = "book", target = "book")
     @Mapping(source = "user", target = "user")
     @Mapping(source = "loandate", target = "loanDate")
-    LoanEntity toEntity(Loan domain);
+    LoanMongoEntity toEntity(Loan domain);
 }

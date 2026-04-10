@@ -1,7 +1,7 @@
 package edu.eci.dosw.DOSW_Library.Controller;
 
 import edu.eci.dosw.DOSW_Library.Modelo.Book;
-import edu.eci.dosw.DOSW_Library.Persistence.Mapper.BookMapper;
+import edu.eci.dosw.DOSW_Library.Persistence.relational.Mapper.BookMapper;
 import edu.eci.dosw.DOSW_Library.Service.BookService;
 import edu.eci.dosw.DOSW_Library.Validator.BookValidator;
 import io.swagger.v3.oas.annotations.Operation;
@@ -54,7 +54,7 @@ public class BookController {
     public void updateStock(@PathVariable String id, @RequestParam int quantity) {
         var bookEntity = bookService.findEntityById(id);
         if (bookEntity != null) {
-            bookEntity.setAvailableStock(quantity);
+            bookEntity.setAvailableCopies(quantity);
             bookService.saveEntity(bookEntity);
         } else {
             throw new RuntimeException("Libro no encontrado con ID: " + id);

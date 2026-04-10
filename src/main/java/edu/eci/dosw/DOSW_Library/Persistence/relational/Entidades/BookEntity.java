@@ -1,4 +1,4 @@
-package edu.eci.dosw.DOSW_Library.Persistence.Entidades;
+package edu.eci.dosw.DOSW_Library.Persistence.relational.Entidades;
 
 import jakarta.persistence.*;
 import lombok.Data;

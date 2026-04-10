@@ -1,10 +1,12 @@
 package edu.eci.dosw.DOSW_Library.Security;
 
 
-import edu.eci.dosw.DOSW_Library.Persistence.Repositorios.UserRepository;
+import edu.eci.dosw.DOSW_Library.Persistence.nonrelational.Repository.UserRepositoryMongo;
+import edu.eci.dosw.DOSW_Library.Persistence.relational.Repositorios.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -18,19 +20,32 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RequiredArgsConstructor
 public class ApplicationConfig {
 
-    private final UserRepository userRepository;
+    private final UserRepositoryMongo userRepository;
+    //private final UserRepository userRepository;
 
     @Bean
     public UserDetailsService userDetailsService() {
         return username -> userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
+                .map(user -> org.springframework.security.core.userdetails.User.builder()
+                        .username(user.getUsername())
+                        .password(user.getPassword()) // Este debe ser el hash de BCrypt
+                        .authorities(user.getRole())
+                        .build())
+                .orElseThrow(() -> new UsernameNotFoundException("No existe: " + username));
     }
 
+
+    //@Bean
+    //public UserDetailsService userDetailsService() {
+    //    return username -> userRepository.findByUsername(username)
+    //            .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
+    //}
+
     @Bean
-    public AuthenticationProvider authenticationProvider() {
+    public AuthenticationProvider authenticationProvider(@Lazy PasswordEncoder passwordEncoder) {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService());
-        authProvider.setPasswordEncoder(passwordEncoder());
+        authProvider.setPasswordEncoder(passwordEncoder); // El @Lazy rompe el círculo aquí
         return authProvider;
     }
 
@@ -39,8 +54,5 @@ public class ApplicationConfig {
         return config.getAuthenticationManager();
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+
 }

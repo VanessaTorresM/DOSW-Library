@@ -1,11 +1,11 @@
 package edu.eci.dosw.DOSW_Library;
 
 
-import edu.eci.dosw.DOSW_Library.Persistence.Entidades.BookEntity;
-import edu.eci.dosw.DOSW_Library.Persistence.Entidades.LoanEntity;
-import edu.eci.dosw.DOSW_Library.Persistence.Entidades.UserEntity;
-import edu.eci.dosw.DOSW_Library.Persistence.Mapper.LoanMapper;
-import edu.eci.dosw.DOSW_Library.Persistence.Repositorios.LoanRepository;
+import edu.eci.dosw.DOSW_Library.Persistence.relational.Entidades.BookEntity;
+import edu.eci.dosw.DOSW_Library.Persistence.relational.Entidades.LoanEntity;
+import edu.eci.dosw.DOSW_Library.Persistence.relational.Entidades.UserEntity;
+import edu.eci.dosw.DOSW_Library.Persistence.relational.Mapper.LoanMapper;
+import edu.eci.dosw.DOSW_Library.Persistence.relational.Repositorios.LoanRepository;
 import edu.eci.dosw.DOSW_Library.Service.BookService;
 import edu.eci.dosw.DOSW_Library.Service.LoanService;
 import edu.eci.dosw.DOSW_Library.Service.UserService;

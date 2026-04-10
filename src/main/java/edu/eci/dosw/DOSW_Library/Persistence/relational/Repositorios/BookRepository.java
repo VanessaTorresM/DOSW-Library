@@ -1,7 +1,7 @@
-package edu.eci.dosw.DOSW_Library.Persistence.Repositorios;
+package edu.eci.dosw.DOSW_Library.Persistence.relational.Repositorios;
 
 
-import edu.eci.dosw.DOSW_Library.Persistence.Entidades.BookEntity;
+import edu.eci.dosw.DOSW_Library.Persistence.relational.Entidades.BookEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

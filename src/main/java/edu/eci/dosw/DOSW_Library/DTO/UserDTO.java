@@ -1,4 +1,4 @@
-package edu.eci.dosw.DOSW_Library.Persistence.DTO;
+package edu.eci.dosw.DOSW_Library.DTO;
 
 import lombok.Data;
 

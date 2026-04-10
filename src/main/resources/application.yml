@@ -3,24 +3,35 @@ spring:
     name: DOSW-Library
   main:
     allow-bean-definition-overriding: true
+
+  # --- CONFIGURACIÓN PARA EL  (MONGODB) ---
+  # http://localhost/swagger-ui/index.html#/ link swaguer
+  data:
+    mongodb:
+      uri: mongodb+srv://VanessaTorres:Flash2022.6@cluster0.q0hvj1i.mongodb.net/DoswLibrary?retryWrites=true&w=majority
+
+
+  # Desactivamos el autoconfigure de SQL para que no pida el EntityManager
   autoconfigure:
-    exclude: org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration
+    exclude:
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+      - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
 
-  datasource:
-    url: jdbc:postgresql://localhost:5432/library
-    username: postgres
-    password: admin123
-    driver-class-name: org.postgresql.Driver
+  # ---  (POSTGRESQL) ---
+  # datasource:
+  #   url: jdbc:postgresql://localhost:5432/library
+  #   username: postgres
+  #   password: admin123
+  #   driver-class-name: org.postgresql.Driver
 
-  jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-
-    properties:
-      hibernate:
-        format_sql: true
+  # jpa:
+  #   database-platform: org.hibernate.dialect.PostgreSQLDialect
+  #   hibernate:
+  #     ddl-auto: update
+  #   show-sql: true
+  #   properties:
+  #     hibernate:
+  #       format_sql: true
 
 springdoc:
   api-docs:
@@ -30,4 +41,4 @@ springdoc:
     path: /swagger-ui.html
 
 server:
-  port: 8080
+  port: 80

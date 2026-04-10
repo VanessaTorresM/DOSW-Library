@@ -1,20 +1,29 @@
 package edu.eci.dosw.DOSW_Library.Service;
 
 import edu.eci.dosw.DOSW_Library.Modelo.Book;
-import edu.eci.dosw.DOSW_Library.Persistence.Entidades.BookEntity;
-import edu.eci.dosw.DOSW_Library.Persistence.Mapper.BookMapper;
-import edu.eci.dosw.DOSW_Library.Persistence.Repositorios.BookRepository;
+import edu.eci.dosw.DOSW_Library.Persistence.nonrelational.Document.BookMongoEntity;
+import edu.eci.dosw.DOSW_Library.Persistence.nonrelational.Mapper.BookMongoMapper;
+import edu.eci.dosw.DOSW_Library.Persistence.nonrelational.Repository.BookRepositoryMongo;
+// import edu.eci.dosw.DOSW_Library.Persistence.relational.Entidades.BookEntity;
+// import edu.eci.dosw.DOSW_Library.Persistence.relational.Mapper.BookMapper;
+// import edu.eci.dosw.DOSW_Library.Persistence.relational.Repositorios.BookRepository;
 import org.springframework.stereotype.Service;
-import java.util.*;
-import java.util.stream.Collectors;
 
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BookService {
-    private final BookRepository bookRepository;
-    private final BookMapper bookMapper;
 
-    public BookService(BookRepository bookRepository, BookMapper bookMapper) {
+    // Persistencia Relacional (Documentación)
+    // private final BookRepository bookRepository;
+    // private final BookMapper bookMapper;
+
+    // Persistencia No Relacional (MongoDB)
+    private final BookRepositoryMongo bookRepository;
+    private final BookMongoMapper bookMapper;
+
+    public BookService(BookRepositoryMongo bookRepository, BookMongoMapper bookMapper) {
         this.bookRepository = bookRepository;
         this.bookMapper = bookMapper;
     }
@@ -32,36 +41,36 @@ public class BookService {
     }
 
     public List<Book> findAvailable(int amount) {
-        return bookRepository.findByAvailableStockGreaterThan(amount).stream()
+        return bookRepository.findByAvailableCopiesGreaterThan(amount).stream()
                 .map(bookMapper::toModel)
                 .collect(Collectors.toList());
     }
 
     public Book save(Book book) {
-        BookEntity entity = bookMapper.toEntity(book);
-        BookEntity savedEntity = bookRepository.save(entity);
+        BookMongoEntity entity = bookMapper.toEntity(book);
+        BookMongoEntity savedEntity = bookRepository.save(entity);
         return bookMapper.toModel(savedEntity);
     }
 
-    public void saveEntity(BookEntity bookEntity) {
+    public void saveEntity(BookMongoEntity bookEntity) {
         bookRepository.save(bookEntity);
     }
 
-    public BookEntity findEntityById(String id) {
+    public BookMongoEntity findEntityById(String id) {
         return bookRepository.findById(id).orElse(null);
     }
 
     public void updateStock(Book book, int newQuantity) {
-        BookEntity entity = bookRepository.findById(book.getId()).orElse(null);
+        BookMongoEntity entity = bookRepository.findById(book.getId()).orElse(null);
         if (entity != null) {
-            entity.setAvailableStock(newQuantity);
+            entity.setAvailableCopies(newQuantity);
             bookRepository.save(entity);
         }
     }
 
     public int getStock(Book book) {
-        BookEntity entity = bookRepository.findById(book.getId()).orElse(null);
-        return (entity != null) ? entity.getAvailableStock() : 0;
+        BookMongoEntity entity = bookRepository.findById(book.getId()).orElse(null);
+        return (entity != null) ? entity.getAvailableCopies() : 0;
     }
 
     public void deleteById(String id) {

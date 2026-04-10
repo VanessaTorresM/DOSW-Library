@@ -1,9 +1,9 @@
 package edu.eci.dosw.DOSW_Library;
 
 import edu.eci.dosw.DOSW_Library.Modelo.Book;
-import edu.eci.dosw.DOSW_Library.Persistence.Entidades.BookEntity;
-import edu.eci.dosw.DOSW_Library.Persistence.Mapper.BookMapper;
-import edu.eci.dosw.DOSW_Library.Persistence.Repositorios.BookRepository;
+import edu.eci.dosw.DOSW_Library.Persistence.relational.Entidades.BookEntity;
+import edu.eci.dosw.DOSW_Library.Persistence.relational.Mapper.BookMapper;
+import edu.eci.dosw.DOSW_Library.Persistence.relational.Repositorios.BookRepository;
 import edu.eci.dosw.DOSW_Library.Service.BookService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

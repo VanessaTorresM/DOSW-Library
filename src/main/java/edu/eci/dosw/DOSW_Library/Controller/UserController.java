@@ -1,7 +1,7 @@
 package edu.eci.dosw.DOSW_Library.Controller;
 
 import edu.eci.dosw.DOSW_Library.Modelo.User;
-import edu.eci.dosw.DOSW_Library.Persistence.Mapper.UserMapper;
+import edu.eci.dosw.DOSW_Library.Persistence.relational.Mapper.UserMapper;
 import edu.eci.dosw.DOSW_Library.Service.UserService;
 import edu.eci.dosw.DOSW_Library.Validator.UserValidator;
 import io.swagger.v3.oas.annotations.Operation;
