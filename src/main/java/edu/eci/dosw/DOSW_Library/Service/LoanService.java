@@ -105,4 +105,12 @@ public class LoanService {
 
         return loanRepository.save(loan);
     }
+    public void deleteById(String id) {
+        loanRepository.deleteById(id);
+    }
+
+    public LoanMongoEntity findById(String id) {
+        return loanRepository.findById(id)
+                .orElse(null); // Retorna null si no existe para el test de "sin resultados"
+    }
 }

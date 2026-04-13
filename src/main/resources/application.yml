@@ -4,12 +4,11 @@ spring:
   main:
     allow-bean-definition-overriding: true
 
-  # --- CONFIGURACIÓN PARA EL  (MONGODB) ---
+  # --- CONFIGURACIÓN PARA EL (MONGODB) ---
   # http://localhost/swagger-ui/index.html#/ link swaguer
   data:
     mongodb:
       uri: mongodb+srv://VanessaTorres:Flash2022.6@cluster0.q0hvj1i.mongodb.net/DoswLibrary?retryWrites=true&w=majority
-
 
   # Desactivamos el autoconfigure de SQL para que no pida el EntityManager
   autoconfigure:
@@ -17,7 +16,7 @@ spring:
       - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
       - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
 
-  # ---  (POSTGRESQL) ---
+  # --- (POSTGRESQL - COMENTADO) ---
   # datasource:
   #   url: jdbc:postgresql://localhost:5432/library
   #   username: postgres
@@ -42,3 +41,17 @@ springdoc:
 
 server:
   port: 80
+
+---
+# --- PERFIL DE TEST PARA GITHUB ACTIONS / PRUEBAS LOCALES ---
+spring:
+  config:
+    activate:
+      on-profile: test
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/test_db
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+      - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration

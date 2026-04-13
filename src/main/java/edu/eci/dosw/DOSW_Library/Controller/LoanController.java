@@ -32,7 +32,6 @@ public class LoanController {
     @PreAuthorize("hasAnyRole('USER', 'LIBRARIAN', 'ADMIN')")
     @Operation(summary = "Crear un nuevo préstamo")
     public Loan createLoan(@RequestParam String userId, @RequestParam String bookId) {
-        // El servicio ahora devuelve LoanMongoEntity
         LoanMongoEntity newLoan = loanService.createLoan(userId, bookId);
         return loanMapper.toModel(newLoan);
     }

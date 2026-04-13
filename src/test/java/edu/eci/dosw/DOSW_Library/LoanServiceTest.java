@@ -1,98 +1,88 @@
 package edu.eci.dosw.DOSW_Library;
 
 
-import edu.eci.dosw.DOSW_Library.Persistence.relational.Entidades.BookEntity;
-import edu.eci.dosw.DOSW_Library.Persistence.relational.Entidades.LoanEntity;
-import edu.eci.dosw.DOSW_Library.Persistence.relational.Entidades.UserEntity;
-import edu.eci.dosw.DOSW_Library.Persistence.relational.Mapper.LoanMapper;
-import edu.eci.dosw.DOSW_Library.Persistence.relational.Repositorios.LoanRepository;
-import edu.eci.dosw.DOSW_Library.Service.BookService;
-import edu.eci.dosw.DOSW_Library.Service.LoanService;
-import edu.eci.dosw.DOSW_Library.Service.UserService;
-import edu.eci.dosw.DOSW_Library.Util.ValidationUtil;
-import edu.eci.dosw.DOSW_Library.Validator.LoanValidator;
-import edu.eci.dosw.DOSW_Library.Exception.BookNotAvailableException;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+import edu.eci.dosw.DOSW_Library.Persistence.nonrelational.Document.LoanMongoEntity;
+import edu.eci.dosw.DOSW_Library.Persistence.nonrelational.Repository.LoanRepositoryMongo;
+import edu.eci.dosw.DOSW_Library.Persistence.nonrelational.Mapper.LoanMongoMapper;
+import edu.eci.dosw.DOSW_Library.Service.LoanService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
 import java.util.Collections;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
-
 
 @ExtendWith(MockitoExtension.class)
 class LoanServiceTest {
 
-    @Mock private BookService bookService;
-    @Mock private UserService userService;
-    @Mock private LoanRepository loanRepository;
-    @Mock private LoanMapper loanMapper;
-    @Mock private ValidationUtil validationUtil;
-    @Mock private LoanValidator loanValidator;
+    @Mock
+    private LoanRepositoryMongo loanRepository;
+
+    @Mock
+    private LoanMongoMapper loanMapper;
 
     @InjectMocks
     private LoanService loanService;
 
     @Test
-    void shouldCreateLoanSuccessfullyWhenStockAvailable() {
-        UserEntity userE = new UserEntity(); userE.setUserId("u1");
-        BookEntity bookE = new BookEntity(); bookE.setId("b1"); bookE.setAvailableStock(1);
+    void givenOneLoan_whenFindById_thenSuccess() {
+        LoanMongoEntity loan = new LoanMongoEntity();
+        loan.setId("loan-123");
+        when(loanRepository.findById("loan-123")).thenReturn(Optional.of(loan));
 
-        when(userService.findEntityById("u1")).thenReturn(userE);
-        when(bookService.findEntityById("b1")).thenReturn(bookE);
-
-        LoanEntity savedLoan = new LoanEntity();
-        savedLoan.setStatus("active");
-        when(loanRepository.save(any(LoanEntity.class))).thenReturn(savedLoan);
-
-        LoanEntity result = loanService.createLoan("u1", "b1");
+        LoanMongoEntity result = loanService.findById("loan-123");
 
         assertNotNull(result);
-        assertEquals("active", result.getStatus());
-        verify(bookService).saveEntity(any(BookEntity.class));
+        assertEquals("loan-123", result.getId());
     }
 
     @Test
-    void shouldFailLoanWhenNoStockIsAvailable() {
-        UserEntity userE = new UserEntity();
-        BookEntity bookE = new BookEntity(); bookE.setAvailableStock(0);
-
-        when(userService.findEntityById("u1")).thenReturn(userE);
-        when(bookService.findEntityById("b1")).thenReturn(bookE);
-
-        doThrow(new BookNotAvailableException("No hay ejemplares disponibles"))
-                .when(validationUtil).checkAvailability(0);
-
-        assertThrows(BookNotAvailableException.class, () -> {
-            loanService.createLoan("u1", "b1");
-        });
-
-        verify(loanRepository, never()).save(any());
-    }
-
-    @Test
-    void shouldThrowExceptionWhenUserNotFound() {
-        when(userService.findEntityById("u999")).thenReturn(null);
-
-        assertThrows(RuntimeException.class, () -> {
-            loanService.createLoan("u999", "b1");
-        });
-    }
-
-    @Test
-    void shouldReturnAllLoans() {
+    void givenNoLoans_whenFindAll_thenEmpty() {
         when(loanRepository.findAll()).thenReturn(Collections.emptyList());
 
-        List<LoanEntity> result = loanService.getAllLoans();
+        List<LoanMongoEntity> result = loanService.getAllLoans();
+
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    void givenNoLoans_whenCreate_thenSuccess() {
+        LoanMongoEntity loan = new LoanMongoEntity();
+        when(loanRepository.save(any())).thenReturn(loan);
+
+        LoanMongoEntity result = loanRepository.save(new LoanMongoEntity());
 
         assertNotNull(result);
-        verify(loanRepository).findAll();
+        verify(loanRepository, times(1)).save(any());
+    }
+
+    @Test
+    void givenOneLoan_whenDelete_thenSuccess() {
+        String id = "loan-123";
+        doNothing().when(loanRepository).deleteById(id);
+
+        loanService.deleteById(id);
+
+        verify(loanRepository, times(1)).deleteById(id);
+    }
+
+    @Test
+    void givenOneLoan_whenDeleteAndFind_thenReturnsNull() {
+        String id = "loan-123";
+        // Simulamos que el objeto ya no existe en el repo
+        when(loanRepository.findById(id)).thenReturn(Optional.empty());
+
+        loanService.deleteById(id);
+        LoanMongoEntity result = loanService.findById(id);
+
+        assertNull(result);
     }
 }

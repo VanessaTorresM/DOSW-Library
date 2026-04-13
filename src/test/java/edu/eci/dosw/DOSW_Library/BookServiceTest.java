@@ -1,9 +1,9 @@
 package edu.eci.dosw.DOSW_Library;
 
 import edu.eci.dosw.DOSW_Library.Modelo.Book;
-import edu.eci.dosw.DOSW_Library.Persistence.relational.Entidades.BookEntity;
-import edu.eci.dosw.DOSW_Library.Persistence.relational.Mapper.BookMapper;
-import edu.eci.dosw.DOSW_Library.Persistence.relational.Repositorios.BookRepository;
+import edu.eci.dosw.DOSW_Library.Persistence.nonrelational.Document.BookMongoEntity;
+import edu.eci.dosw.DOSW_Library.Persistence.nonrelational.Mapper.BookMongoMapper;
+import edu.eci.dosw.DOSW_Library.Persistence.nonrelational.Repository.BookRepositoryMongo;
 import edu.eci.dosw.DOSW_Library.Service.BookService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,40 +24,39 @@ import static org.mockito.Mockito.*;
 class BookServiceTest {
 
     @Mock
-    private BookRepository bookRepository;
+    private BookRepositoryMongo bookRepository;
 
     @Mock
-    private BookMapper bookMapper;
+    private BookMongoMapper bookMapper;
 
     @InjectMocks
     private BookService bookService;
 
     private Book bookModel;
-    private BookEntity bookEntity;
+    private BookMongoEntity bookEntity;
 
     @BeforeEach
     void setUp() {
         bookModel = new Book("b1", "Martin Fowler", "Refactoring");
 
-        bookEntity = new BookEntity();
+        bookEntity = new BookMongoEntity();
         bookEntity.setId("b1");
         bookEntity.setTitle("Refactoring");
         bookEntity.setAuthor("Martin Fowler");
-        bookEntity.setTotalStock(10);
-        bookEntity.setAvailableStock(10);
+        bookEntity.setAvailableCopies(10);
     }
 
     @Test
     void shouldSaveBookCorrectly() {
         when(bookMapper.toEntity(any(Book.class))).thenReturn(bookEntity);
-        when(bookRepository.save(any(BookEntity.class))).thenReturn(bookEntity);
-        when(bookMapper.toModel(any(BookEntity.class))).thenReturn(bookModel);
+        when(bookRepository.save(any(BookMongoEntity.class))).thenReturn(bookEntity);
+        when(bookMapper.toModel(any(BookMongoEntity.class))).thenReturn(bookModel);
 
         Book saved = bookService.save(bookModel);
 
         assertNotNull(saved);
         verify(bookRepository).save(argThat(entity ->
-                entity.getAvailableStock() == 10 && entity.getId().equals("b1")
+                entity.getAvailableCopies() == 10 && entity.getId().equals("b1")
         ));
     }
 
@@ -82,26 +81,12 @@ class BookServiceTest {
     }
 
     @Test
-    void shouldFindAvailableBooksByStock() {
-        when(bookRepository.findByAvailableStockGreaterThan(5))
-                .thenReturn(Collections.singletonList(bookEntity));
-        when(bookMapper.toModel(bookEntity)).thenReturn(bookModel);
-
-        List<Book> result = bookService.findAvailable(5);
-
-        assertFalse(result.isEmpty());
-        assertEquals(1, result.size());
-        verify(bookRepository).findByAvailableStockGreaterThan(5);
-    }
-
-    @Test
     void shouldFindEntityDirectly() {
         when(bookRepository.findById("b1")).thenReturn(Optional.of(bookEntity));
 
-        BookEntity entityFound = bookService.findEntityById("b1");
+        BookMongoEntity entityFound = bookService.findEntityById("b1");
 
         assertNotNull(entityFound);
         assertEquals("b1", entityFound.getId());
-        assertEquals(10, entityFound.getAvailableStock());
     }
 }

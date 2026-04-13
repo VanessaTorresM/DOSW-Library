@@ -11,10 +11,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 //@EnableJpaRepositories(basePackages = "edu.eci.dosw.DOSW_Library.Persistence.Repositorios")
 //@SpringBootApplication(exclude = {MongoAutoConfiguration.class})
 
-@SpringBootApplication(exclude = {
-        DataSourceAutoConfiguration.class,
-        HibernateJpaAutoConfiguration.class
-})
+@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class, HibernateJpaAutoConfiguration.class})
 @EnableMongoRepositories(basePackages = "edu.eci.dosw.DOSW_Library.Persistence.nonrelational.Repository")
 public class DoswLibraryApplication {
 
