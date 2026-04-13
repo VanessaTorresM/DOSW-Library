@@ -2,7 +2,7 @@
 
 Este sistema es una API REST desarrollada con Spring Boot para la gestión integral de una biblioteca universitaria. Su funcionamiento se basa en la administración de tres entidades principales: Usuarios, Libros y Préstamos. El flujo comienza con el registro de usuarios o de libros, luego el usuario puede hacer un prestamo,  La robustez del proyecto reside en su capa de validaciones y manejo de excepciones, que impide acciones inválidas como prestar un libro sin stock o registrar datos incompletos y responde con mensajes de error claros y estandarizados, garantizando así la integridad de la información en todo momento.
 
-## Diagrama General
+## Diagrama General en vez de interfaz de usuario biblioteca frontend
 <img width="884" height="209" alt="image" src="https://github.com/user-attachments/assets/9bef1617-61b7-4a32-a902-edb238ad6f93" />
 
 Se utiliza un modelo de componentes para visualizar cómo se dividen las responsabilidades del sistema y cómo interactúan entre sí a través de interfaces definidas.
@@ -11,7 +11,8 @@ Interfaz de Usuario, representa el punto de entrada del sistema donde el usuario
 
 
 ## Diagrama especifico
-<img width="741" height="192" alt="Biblioteca-Página-2 drawio" src="https://github.com/user-attachments/assets/501d186b-53d7-41d3-8aef-a236b0184d3e" />
+<img width="1130" height="386" alt="image" src="https://github.com/user-attachments/assets/84954378-e4d7-4631-b7af-e3fa1033d5c3" />
+
 Este diagrama de especifico muestra cómo está organizada la lógica del proyecto de la biblioteca siguiendo una estructura de capas para cada funcionalidad. En primer lugar, los Mappers se encargan de transformar los datos que vienen de afuera para que los Controladores puedan recibirlos correctamente. Estos Controladores actúan como la puerta de entrada que se conecta con los Services, donde realmente ocurre el procesamiento de la información. Finalmente, los Services se apoyan en los Validators para verificar que todas las reglas de negocio se cumplan, como revisar si un libro está disponible o si los datos del usuario son válidos, asegurando que solo la información correcta llegue a procesarse en el sistema.
 
 
@@ -41,4 +42,8 @@ https://youtu.be/xMdPkjSlrc8
 
 ## JWT en postman
 https://youtu.be/IWEpHUQmmPw
+
+## Diagrama No relacional 
+<img width="821" height="561" alt="Untitled Diagram (3)-Page-1 drawio" src="https://github.com/user-attachments/assets/df1fc9ec-7361-4db1-9a3f-6e8f2569cfdb" />
+
 
