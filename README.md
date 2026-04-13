@@ -49,4 +49,7 @@ https://youtu.be/nHhLaTXw-ew
 ## Diagrama No relacional 
 <img width="821" height="561" alt="Untitled Diagram (3)-Page-1 drawio" src="https://github.com/user-attachments/assets/df1fc9ec-7361-4db1-9a3f-6e8f2569cfdb" />
 
+<img width="1909" height="850" alt="image" src="https://github.com/user-attachments/assets/56a744f0-497a-4c5d-9046-b291d4eb5224" />
+
+
 
