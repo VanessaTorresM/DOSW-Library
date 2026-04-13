@@ -28,10 +28,10 @@ public class ApplicationConfig {
         return username -> userRepository.findByUsername(username)
                 .map(user -> org.springframework.security.core.userdetails.User.builder()
                         .username(user.getUsername())
-                        .password(user.getPassword()) // Este debe ser el hash de BCrypt
-                        .authorities(user.getRole())
+                        .password(user.getPassword())
+                        .authorities("ROLE_" + user.getRole())
                         .build())
-                .orElseThrow(() -> new UsernameNotFoundException("No existe: " + username));
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
     }
 
 
