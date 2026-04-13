@@ -43,6 +43,9 @@ https://youtu.be/xMdPkjSlrc8
 ## JWT en postman
 https://youtu.be/IWEpHUQmmPw
 
+## Base de datos en Mongo 
+https://youtu.be/nHhLaTXw-ew
+
 ## Diagrama No relacional 
 <img width="821" height="561" alt="Untitled Diagram (3)-Page-1 drawio" src="https://github.com/user-attachments/assets/df1fc9ec-7361-4db1-9a3f-6e8f2569cfdb" />
 
